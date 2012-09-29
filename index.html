@@ -15,29 +15,38 @@
     <script src="lib/unions/descendant.js"></script>
     <script src="lib/unions/or.js"></script>
     <script>
-        /*var filter;
-         var filterAny = createFilterAny();
-         console.log('Any', convertResult(findByFilter(filterAny, data)));
-         var filterName = createFilterName('prop1');
-         console.log('name prop1', convertResult(findByFilter(filterName, data)));
-         var filterType = createFilterType('number');
-         console.log('type number', convertResult(findByFilter(filterType, data)));*/
+        var filter;
 
-        /*
-         filter = childrenUnion(createFilterRoot(), createFilterType('number'));
-         console.log(':root>number', convertResult(findByFilter(filter, data)));
-         console.log(data);
+        filter = childrenUnion(createFilterRoot(), createFilterType('number'));
+        console.log(':root>number', convertResult(findByFilter(filter, data)));
+        console.log(data);
 
-         filter = descendantUnion(createFilterRoot(), createFilterType('number'));
-         console.log(':root number', convertResult(findByFilter(filter, data)));
-         console.log(data);
+        filter = descendantUnion(createFilterRoot(), createFilterType('number'));
+        console.log(':root number', convertResult(findByFilter(filter, data)));
+        console.log(data);
 
-         filter = descendantUnion(createFilterRoot(), createFilterName('prop3'));
-         console.log(':root .prop3', convertResult(findByFilter(filter, data)));
-         console.log(data);
-         */
+        filter = descendantUnion(createFilterRoot(), createFilterName('prop3'));
+        console.log(':root .prop3', convertResult(findByFilter(filter, data)));
+        console.log(data);
+
         filter = descendantUnion(createFilterRoot(), unionAnd(createFilterName('prop3'), createFilterType('object')));
         console.log(':root object.prop3', convertResult(findByFilter(filter, data)));
+        console.log(data);
+
+        filter = descendantUnion(createFilterRoot(), createFilterName('prop1'));
+        console.log(':root .prop1', convertResult(findByFilter(filter, data)));
+        console.log(data);
+
+        filter = descendantUnion(createFilterRoot(), createFilterName('prop3'));
+        console.log(':root .prop3', convertResult(findByFilter(filter, data)));
+        console.log(data);
+
+        filter = unionOr(descendantUnion(createFilterRoot(), createFilterName('prop1')), descendantUnion(createFilterRoot(), createFilterName('prop3')));
+        console.log(':root .prop1, :root .prop3', convertResult(findByFilter(filter, data)));
+        console.log(data);
+
+        filter = unionOr(descendantUnion(createFilterRoot(), createFilterName('prop3')), descendantUnion(createFilterRoot(), createFilterName('prop3')));
+        console.log(':root .prop3, :root .prop3', convertResult(findByFilter(filter, data)));
         console.log(data);
 
     </script>
