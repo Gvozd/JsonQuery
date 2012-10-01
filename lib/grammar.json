@@ -2,7 +2,7 @@
     "lex": {
         "rules": [
             ["(\\w|\\d)+", "return 'identity';"],
-            [":root", "root"],
+            [":root", "return 'root';"],
             ["\\s*>\\s*", "return '>';"],
             ["\\s+", "return 'space';"],
             ["\\.", "return '.';"],
@@ -19,8 +19,8 @@
     ],
     "bnf": {
         "ruleset" :[
-            [ "selector",   "return $1;"  ],
-            [ "ruleset comma selector",   "return createUnionOr($1, $3);"],
+            [ "selector",   "$$ = $1;"  ],
+            [ "ruleset comma selector",   "$$ = createUnionOr($1, $3);"],
             [ "ruleset EOF",   "return $1;"  ]
         ],
         "selector": [
@@ -30,7 +30,7 @@
             ["selector > simple_selector", "$$ = createChildrenUnion($1, $3);"]
         ],
         "simple_selector" : [
-            ["*", "$$ = 'createFilterAny()';"],
+            ["*", "$$ = createFilterAny();"],
             ["identity", "$$ = createFilterType($1);"],
             [". identity", "$$ = createFilterName($2);"],
             ["simple_selector . identity", "$$ = createUnionAnd($1, createFilterName($3));"]
