@@ -35,7 +35,8 @@
             "whiskey",
             "wine"
         ],
-        "weight": 172
+        "weight": 172,
+        "quoted\"property\"": "value of quoted"
     };
     function test(name, selector, filterStringExpected, resultExpected) {
         window.test(name, function () {
@@ -70,7 +71,18 @@
             [":root>.languagesSpoken>.1>.language", data.languagesSpoken[1].language],
             [":root>.languagesSpoken>.2>.language", data.languagesSpoken[2].language]
         ]);
-    //test('basic_id_quotes', '."weight"', '', []);//172,
+    test('basic_id_quotes',
+        '."weight"',
+        'unionOr(unionAnd(filterRoot(), filterName("weight")),descendantUnion(filterRoot(),filterName("weight")))',
+        [
+            [':root>.weight', data.weight]
+        ]);//172,
+    test('extend_id_quotes',
+        '."quoted\\"property\\""',
+        'unionOr(unionAnd(filterRoot(), filterName("quoted\\"property\\"")),descendantUnion(filterRoot(),filterName("quoted\\"property\\"")))',
+        [
+            [':root>.quoted\"property\"', data['quoted"property"']]
+        ]);//172,
     test('basic_id_with_type',
         'string.favoriteColor',
         'unionOr(unionAnd(filterRoot(), unionAnd(filterType("string"), filterName("favoriteColor"))),descendantUnion(filterRoot(),unionAnd(filterType("string"), filterName("favoriteColor"))))',
@@ -101,7 +113,8 @@
             [":root>.seatingPreference>.1", data.seatingPreference[1]],
             [":root>.drinkPreference>.0", data.drinkPreference[0]],
             [":root>.drinkPreference>.1", data.drinkPreference[1]],
-            [":root>.drinkPreference>.2", data.drinkPreference[2]]
+            [":root>.drinkPreference>.2", data.drinkPreference[2]],
+            [':root>.quoted\"property\"', data['quoted"property"']]
         ]);//"Lloyd","Hilaiel","yellow","Bulgarian","advanced","English","native","Spanish","beginner","window","aisle","beer","whiskey","wine"
     test('basic_type2',
         'number',
@@ -144,13 +157,17 @@
             [":root>.drinkPreference>.0", data.drinkPreference[0]],
             [":root>.drinkPreference>.1", data.drinkPreference[1]],
             [":root>.drinkPreference>.2", data.drinkPreference[2]],
-            [":root>.weight", data.weight]
+            [":root>.weight", data.weight],
+            [':root>.quoted\"property\"', data['quoted"property"']]
         ]);//"Lloyd","Hilaiel",{,"first": "Lloyd",,"last": "Hilaiel",},"yellow","Bulgarian","advanced",{,"language": "Bulgarian",,"level": "advanced",},"English","native",{,"language": "English",,"level": "native",},"Spanish","beginner",{,"language": "Spanish",,"level": "beginner",},[,{,"language": "Bulgarian",,"level": "advanced",},,{,"language": "English",,"level": "native",},,{,"language": "Spanish",,"level": "beginner",},],"window","aisle",[,"window",,"aisle",],"beer","whiskey","wine",[,"beer",,"whiskey",,"wine",],172,{,"name": {,"first": "Lloyd",,"last": "Hilaiel",},,"favoriteColor": "yellow",,"languagesSpoken": [,{,"language": "Bulgarian",,"level": "advanced",},,{,"language": "English",,"level": "native",},,{,"language": "Spanish",,"level": "beginner",},],,"seatingPreference": [,"window",,"aisle",],,"drinkPreference": [,"beer",,"whiskey",,"wine",],,"weight": 172,}
     test('collision_nested',
         '.object .string',
         'descendantUnion(unionOr(unionAnd(filterRoot(), filterName("object")),descendantUnion(filterRoot(),filterName("object"))),filterName("string"))',
         []);//"some string"
-    //test('collision_quoted-string', '."string"', '', []);//"some string"
+    test('collision_quoted-string',
+        '."string"',
+        'unionOr(unionAnd(filterRoot(), filterName("string")),descendantUnion(filterRoot(),filterName("string")))',
+        []);//"some string"
     test('collision_string',
         '.string',
         'unionOr(unionAnd(filterRoot(), filterName("string")),descendantUnion(filterRoot(),filterName("string")))',

@@ -1,39 +1,36 @@
-{
-    "lex": {
-        "rules": [
-            ["(\\w|\\d)+", "return 'identity';"],
-            [":root", "return 'root';"],
-            ["\\s*>\\s*", "return '>';"],
-            ["\\s+", "return 'space';"],
-            ["\\.", "return '.';"],
-            ["\\*", "return '*';"],
-            ["\\s*,\\s*", "return 'comma';"],
-            ["$", "return 'EOF';"]
-        ]
-    },
-
-    "operators": [
-        ["left", "comma"],
-        ["left", " ", ">"],
-        ["left", "."]
+{"lex": {
+    "rules": [
+        ["(\\w|\\d)+", "return 'identity';"],
+        ["\"((?:\\w|\\d|\\\\\")+)\"", "yytext = this.matches[1].replace(/\\\\\"/g, '\"');return 'identity';"],
+        ["'((?:\\w|\\d|\\\\')+)'", "yytext = this.matches[1].replace(/\\\\'/g, '\\'');return 'identity';"],
+        [":root", "return 'root';"],
+        ["\\s*>\\s*", "return '>';"],
+        ["\\s+", "return 'space';"],
+        ["\\.", "return '.';"],
+        ["\\*", "return '*';"],
+        ["\\s*,\\s*", "return 'comma';"],
+        ["$", "return 'EOF';"]
+    ]
+}, "operators": [
+    ["left", "comma"],
+    ["left", " ", ">"],
+    ["left", "."]
+], "bnf": {
+    "ruleset": [
+        ["selector", "$$ = $1;"],
+        ["ruleset comma selector", "$$ = createUnionOr($1, $3);"],
+        ["ruleset EOF", "return $1;"]
     ],
-    "bnf": {
-        "ruleset" :[
-            [ "selector",   "$$ = $1;"  ],
-            [ "ruleset comma selector",   "$$ = createUnionOr($1, $3);"],
-            [ "ruleset EOF",   "return $1;"  ]
-        ],
-        "selector": [
-            ["root", "$$ = createFilterRoot();"],
-            ["simple_selector", "$$ = createUnionOr(createUnionAnd(createFilterRoot(),$1),createDescendantUnion(createFilterRoot(), $1));"],
-            ["selector space simple_selector", "$$ = createDescendantUnion($1, $3);"],
-            ["selector > simple_selector", "$$ = createChildrenUnion($1, $3);"]
-        ],
-        "simple_selector" : [
-            ["*", "$$ = createFilterAny();"],
-            ["identity", "$$ = createFilterType($1);"],
-            [". identity", "$$ = createFilterName($2);"],
-            ["simple_selector . identity", "$$ = createUnionAnd($1, createFilterName($3));"]
-        ]
-    }
-}
+    "selector": [
+        ["root", "$$ = createFilterRoot();"],
+        ["simple_selector", "$$ = createUnionOr(createUnionAnd(createFilterRoot(),$1),createDescendantUnion(createFilterRoot(), $1));"],
+        ["selector space simple_selector", "$$ = createDescendantUnion($1, $3);"],
+        ["selector > simple_selector", "$$ = createChildrenUnion($1, $3);"]
+    ],
+    "simple_selector": [
+        ["*", "$$ = createFilterAny();"],
+        ["identity", "$$ = createFilterType($1);"],
+        [". identity", "$$ = createFilterName($2);"],
+        ["simple_selector . identity", "$$ = createUnionAnd($1, createFilterName($3));"]
+    ]
+}}
