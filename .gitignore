@@ -1,2 +1,4 @@
 /.idea
 /tests/lloyd-JSONSelectTests-29f2882
+/dist
+/node_modules

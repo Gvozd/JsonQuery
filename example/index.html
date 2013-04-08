@@ -4,17 +4,18 @@
     <meta charset="utf-8">
     <title>Test Playground</title>
     <script src="data.js"></script>
-    <script src="../lib/grammar.js"></script>
-    <script src="../lib/filtering.js"></script>
-    <script src="../lib/filters/any.js"></script>
-    <script src="../lib/filters/deeperAny.js"></script>
-    <script src="../lib/filters/name.js"></script>
-    <script src="../lib/filters/root.js"></script>
-    <script src="../lib/filters/type.js"></script>
-    <script src="../lib/unions/and.js"></script>
-    <script src="../lib/unions/children.js"></script>
-    <script src="../lib/unions/descendant.js"></script>
-    <script src="../lib/unions/or.js"></script>
+    <!--<script src="../lib/grammar.js"></script>-->
+    <!--<script src="../lib/filtering.js"></script>-->
+    <!--<script src="../lib/filters/any.js"></script>-->
+    <!--<script src="../lib/filters/deeperAny.js"></script>-->
+    <!--<script src="../lib/filters/name.js"></script>-->
+    <!--<script src="../lib/filters/root.js"></script>-->
+    <!--<script src="../lib/filters/type.js"></script>-->
+    <!--<script src="../lib/unions/and.js"></script>-->
+    <!--<script src="../lib/unions/children.js"></script>-->
+    <!--<script src="../lib/unions/descendant.js"></script>-->
+    <!--<script src="../lib/unions/or.js"></script>-->
+    <script src="../dist/JsonQuery.js"></script>
     <script>
         var filter, selector;
         console.log(data);
@@ -27,9 +28,7 @@
         test('.prop3, .prop3');
 
         function test(selector) {
-            filter = parser.parse(selector);
-            console.log(selector);
-            console.log(convertResult(findByFilter(filter, data)));
+            console.log(JsonQuery(selector, data));
         }
 
     </script>
