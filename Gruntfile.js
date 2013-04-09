@@ -48,16 +48,22 @@ module.exports = function (grunt) {
                 noarg: true,
                 sub: true,
                 undef: true,
-                unused: true,
+                unused: false,
                 boss: true,
                 eqnull: true,
+                node:true,
                 globals: {}
             },
             gruntfile: {
                 src: 'Gruntfile.js'
             },
             lib_test: {
-                src: ['lib/**/*.js', 'test/**/*.js']
+                src: [
+                    'lib/filters/*.js',
+                    'lib/unions/*.js',
+                    'lib/filtering.js',
+                    'tests/selectors.js'
+                ]
             }
         },
         nodeunit: {
@@ -89,6 +95,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-exec');
 
     // Default task.
-    grunt.registerTask('default', ['exec', /*'jshint',*/ 'concat', 'uglify', 'nodeunit']);
+    grunt.registerTask('default', ['jshint', 'exec', 'concat', 'uglify', 'nodeunit']);
 
 };

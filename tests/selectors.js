@@ -17,7 +17,9 @@ fs.readdirSync(pathToTests).forEach(function(subdir) {
                 test.expect(1);
                 var selector = String(fs.readFileSync(path.join(currentPath, file))).trim();
                 var data = JSON.parse(fs.readFileSync(path.join(currentPath, testCase[1] + '.json')));
-                var actual = JsonQuery(selector, data).map(function(el) {return JSON.stringify(el, undefined, 4)}).join("\n");
+                var actual = new JsonQuery(selector, data).map(function(el) {
+                    return JSON.stringify(el, undefined, 4);
+                }).join("\n");
                 var expected = String(fs.readFileSync(path.join(currentPath, file.replace(/selector$/, "output")))).trim();
                 test.equal(actual.trim().replace(/\r?\n/g, '\n'), expected.trim().replace(/\r?\n/g, '\n'));
                 test.done();
