@@ -24,6 +24,8 @@
     ],
     "dependencies": {},
     "devDependencies": {
+        "qunit": "*",
+        "nodeunit": "*",
         "grunt": "*",
         "grunt-contrib-concat": "*",
         "grunt-contrib-uglify": "*",
