@@ -21,7 +21,13 @@ fs.readdirSync(pathToTests).forEach(function(subdir) {
                     return JSON.stringify(el, undefined, 4);
                 }).join("\n");
                 var expected = String(fs.readFileSync(path.join(currentPath, file.replace(/selector$/, "output")))).trim();
-                test.equal(actual.trim().replace(/\r?\n/g, '\n'), expected.trim().replace(/\r?\n/g, '\n'));
+                actual = actual.trim().replace(/\r?\n/g, '\n');
+                expected = expected.trim().replace(/\r?\n/g, '\n');
+                test.equal(actual, expected);
+                if(actual !== expected) {
+                    fs.writeFileSync(path.join(currentPath, file.replace(/selector$/, "output1")), actual);
+                }
+
                 test.done();
             };
         }
