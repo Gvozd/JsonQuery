@@ -72,6 +72,11 @@ module.exports = function (grunt) {
                 files: '<%= jshint.lib_test.src %>',
                 tasks: ['jshint:lib_test', 'nodeunit']
             }
+        },
+        exec: {
+            jison: {
+                cmd: 'cd lib && jison grammar.json'
+            }
         }
     });
 
@@ -81,8 +86,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-exec');
 
     // Default task.
-    grunt.registerTask('default', [/*'jshint', */'nodeunit', 'concat', 'uglify']);
+    grunt.registerTask('default', ['exec', /*'jshint',*/ 'concat', 'uglify', 'nodeunit']);
 
 };
