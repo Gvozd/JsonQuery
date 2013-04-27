@@ -16,13 +16,12 @@ invalid1  \"([^\n\r\f\\"]|\\{nl}|{nonascii}|{escape})*
 invalid2  \'([^\n\r\f\\']|\\{nl}|{nonascii}|{escape})*
 nl        \n|\r\n|\r|\f
 w         [ \t\r\n\f]*
-
-D         d|\\0{0,4}(44|64)(\r\n|[ \t\r\n\f])?
-E         e|\\0{0,4}(45|65)(\r\n|[ \t\r\n\f])?
-N         n|\\0{0,4}(4e|6e)(\r\n|[ \t\r\n\f])?|\\n
-O         o|\\0{0,4}(4f|6f)(\r\n|[ \t\r\n\f])?|\\o
-T         t|\\0{0,4}(54|74)(\r\n|[ \t\r\n\f])?|\\t
-V         v|\\0{0,4}(58|78)(\r\n|[ \t\r\n\f])?|\\v
+D         d|\\0{0,4}("44"|"64")(\r\n|[ \t\r\n\f])?
+E         e|\\0{0,4}("45"|"65")(\r\n|[ \t\r\n\f])?
+N         n|\\0{0,4}("4e"|"6e")(\r\n|[ \t\r\n\f])?s
+O         o|\\0{0,4}("4f"|"6f")(\r\n|[ \t\r\n\f])?|\\o
+T         t|\\0{0,4}("54"|"74")(\r\n|[ \t\r\n\f])?|\\t
+V         v|\\0{0,4}("58"|"78")(\r\n|[ \t\r\n\f])?|\\v
 
 %options case-insensitive
 
@@ -54,7 +53,7 @@ V         v|\\0{0,4}(58|78)(\r\n|[ \t\r\n\f])?|\\v
 
 \/\*[^*]*\*+([^/*][^*]*\*+)*\/                    /* ignore comments */
 
-.                return *yytext;
+.                return yytext;
 
 /lex
 
@@ -63,11 +62,11 @@ V         v|\\0{0,4}(58|78)(\r\n|[ \t\r\n\f])?|\\v
 %% /* language grammar */
 
 selectors_group
-  : selector [ COMMA S* selector ]*
+  : selector ( COMMA S* selector )*
   ;
 
 selector
-  : simple_selector_sequence [ combinator simple_selector_sequence ]*
+  : simple_selector_sequence ( combinator simple_selector_sequence )*
   ;
 
 combinator
@@ -76,17 +75,17 @@ combinator
   ;
 
 simple_selector_sequence
-  : [ type_selector | universal ]
-    [ HASH | class | attrib | pseudo | negation ]*
-  | [ HASH | class | attrib | pseudo | negation ]+
+  : ( type_selector | universal )
+    ( HASH | class | attrib | pseudo | negation )*
+  | ( HASH | class | attrib | pseudo | negation )+
   ;
 
 type_selector
-  : [ namespace_prefix ]? element_name
+  : ( namespace_prefix )? element_name
   ;
 
 namespace_prefix
-  : [ IDENT | '*' ]? '|'
+  : ( IDENT | '*' )? '|'
   ;
 
 element_name
@@ -94,7 +93,7 @@ element_name
   ;
 
 universal
-  : [ namespace_prefix ]? '*'
+  : ( namespace_prefix )? '*'
   ;
 
 class
@@ -102,14 +101,14 @@ class
   ;
 
 attrib
-  : '[' S* [ namespace_prefix ]? IDENT S*
-        [ [ PREFIXMATCH |
+  : '[' S* ( namespace_prefix )? IDENT S*
+        ( ( PREFIXMATCH |
             SUFFIXMATCH |
             SUBSTRINGMATCH |
             '=' |
             INCLUDES |
-            DASHMATCH ] S* [ IDENT | STRING ] S*
-        ]? ']'
+            DASHMATCH ) S* ( IDENT | STRING ) S*
+        )? ']'
   ;
 
 pseudo
@@ -117,7 +116,7 @@ pseudo
   /* Exceptions: :first-line, :first-letter, :before and :after. */
   /* Note that pseudo-elements are restricted to one per selector and */
   /* occur only in the last simple_selector_sequence. */
-  : ':' ':'? [ IDENT | functional_pseudo ]
+  : ':' ':'? ( IDENT | functional_pseudo )
   ;
 
 functional_pseudo
@@ -127,7 +126,7 @@ functional_pseudo
 expression
   /* In CSS3, the expressions are identifiers, strings, */
   /* or of the form "an+b" */
-  : [ [ PLUS | '-' | DIMENSION | NUMBER | STRING | IDENT ] S* ]+
+  : ( ( PLUS | '-' | DIMENSION | NUMBER | STRING | IDENT ) S* )+
   ;
 
 negation
