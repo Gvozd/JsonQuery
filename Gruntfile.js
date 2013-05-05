@@ -81,7 +81,7 @@ module.exports = function (grunt) {
         },
         exec: {
             jison: {
-                cmd: 'cd lib && jison grammar.json'
+                cmd: 'cd lib && jison grammar.jison'
             }
         }
     });
