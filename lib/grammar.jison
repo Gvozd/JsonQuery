@@ -96,13 +96,19 @@ simple_selector_sequence
   ;
 
 type_selector
-  : ( namespace_prefix )? element_name
-    {console.log('type_selector');$$ = notImplemented(arguments);}
+  : namespace_prefix element_name
+    {console.log('type_selector 1');$$ = notImplemented(arguments);}
+  | element_name
+    {console.log('type_selector 2');$$ = notImplemented(arguments);}
   ;
 
 namespace_prefix
-  : ( IDENT | '*' )? '|'
-    {console.log('namespace_prefix');$$ = notImplemented(arguments);}
+  : IDENT '|'
+    {console.log('namespace_prefix 1');$$ = notImplemented(arguments);}
+  | '*' '|'
+    {console.log('namespace_prefix 2');$$ = notImplemented(arguments);}
+  | '|'
+    {console.log('namespace_prefix 3');$$ = notImplemented(arguments);}
   ;
 
 element_name
@@ -111,24 +117,30 @@ element_name
   ;
 
 universal
-  : ( namespace_prefix )? '*'
-    {console.log('universal');$$ = notImplemented(arguments);}
+  : namespace_prefix '*'
+    {console.log('universal 1');$$ = notImplemented(arguments);}
+  | '*'
+    {console.log('universal 2');$$ = notImplemented(arguments);}
   ;
 
 class
   : '.' IDENT
     {console.log('class');$$ = notImplemented(arguments);}
   ;
-
 attrib
-  : '[' S* ( namespace_prefix )? IDENT S*
-        ( ( PREFIXMATCH |
-            SUFFIXMATCH |
-            SUBSTRINGMATCH |
-            '=' |
-            INCLUDES |
-            DASHMATCH ) S* ( IDENT | STRING ) S*
-        )? ']'
+  : '[' IDENT ']'
+    {console.log('fake attrib');$$ = notImplemented(arguments);}
+;
+
+attrib2
+  : '[' 'S*' namespace_prefix IDENT 'S*' ( PREFIXMATCH | SUFFIXMATCH | SUBSTRINGMATCH | '=' | INCLUDES | DASHMATCH ) 'S*' ( IDENT | STRING ) 'S*' ']'
+    {console.log('attrib 1');$$ = notImplemented(arguments);}
+  | '[' 'S*' namespace_prefix IDENT 'S*' ']'
+    {console.log('attrib 2');$$ = notImplemented(arguments);}
+  | '[' 'S*' IDENT 'S*' ( PREFIXMATCH | SUFFIXMATCH | SUBSTRINGMATCH | '=' | INCLUDES | DASHMATCH ) 'S*' ( IDENT | STRING ) 'S*' ']'
+    {console.log('attrib 3');$$ = notImplemented(arguments);}
+  | '[' 'S*' IDENT 'S*'  ']'
+    {console.log('attrib 4');$$ = notImplemented(arguments);}
   ;
 
 pseudo
