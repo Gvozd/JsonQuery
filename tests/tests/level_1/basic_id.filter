@@ -1,0 +1,1 @@
+unionOr(unionAnd(filterRoot(), filterName("favoriteColor")),descendantUnion(filterRoot(),filterName("favoriteColor")))

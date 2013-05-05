@@ -1,0 +1,1 @@
+descendantUnion(unionOr(unionAnd(filterRoot(), filterName("object")),descendantUnion(filterRoot(),filterName("object"))),filterName("string"))

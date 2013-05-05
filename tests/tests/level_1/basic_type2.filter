@@ -1,0 +1,1 @@
+unionOr(unionAnd(filterRoot(), filterType("number")),descendantUnion(filterRoot(),filterType("number")))

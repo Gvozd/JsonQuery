@@ -11,22 +11,29 @@ fs.readdirSync(pathToTests).forEach(function(subdir) {
     }
     var files = fs.readdirSync(currentPath);
     files.forEach(function(file) {
-        var testCase = /^([^.][A-Za-z]+)_(.+)\.selector$/.exec(file);
+        var testCase = /^([^.][A-Za-z]+)_(.+)\.selector$/.exec(file), result, actual;
         if (testCase) {
             exports[subdir + '/' + testCase[1] + '_' + testCase[2]] = function(test){
                 test.expect(1);
                 var selector = String(fs.readFileSync(path.join(currentPath, file))).trim();
                 var data = JSON.parse(fs.readFileSync(path.join(currentPath, testCase[1] + '.json')));
-                var actual = new JsonQuery(selector, data).map(function(el) {
-                    return JSON.stringify(el, undefined, 4);
-                }).join("\n");
-                var expected = String(fs.readFileSync(path.join(currentPath, file.replace(/selector$/, "output")))).trim();
-                actual = actual.trim().replace(/\r?\n/g, '\n');
-                expected = expected.trim().replace(/\r?\n/g, '\n');
-                test.equal(actual, expected);
-                if(actual !== expected) {
-                    fs.writeFileSync(path.join(currentPath, file.replace(/selector$/, "output1")), actual);
+                try {
+                    result = new JsonQuery(selector, data);
+                    actual = result.map(function(el) {
+                        return JSON.stringify(el, undefined, 4);
+                    }).join("\n");
+                }catch(e) {
+                    actual = 'Exception: ' + (e.message || e);
+                } finally {
+                    var expected = String(fs.readFileSync(path.join(currentPath, file.replace(/selector$/, "output")))).trim();
+                    actual = actual.trim().replace(/\r?\n/g, '\n');
+                    expected = expected.trim().replace(/\r?\n/g, '\n');
+                    test.equal(actual, expected);
+                    if(actual !== expected) {
+                        fs.writeFileSync(path.join(currentPath, file.replace(/selector$/, "output1")), actual);
+                    }
                 }
+                fs.writeFileSync(path.join(currentPath, file.replace(/selector$/, "filter")), result.filter + '');
 
                 test.done();
             };

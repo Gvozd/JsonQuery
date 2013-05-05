@@ -1,0 +1,1 @@
+unionOr(unionAnd(filterRoot(), filterName("string")),descendantUnion(filterRoot(),filterName("string")))
