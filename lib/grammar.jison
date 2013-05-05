@@ -62,42 +62,62 @@ V         v|\\0{0,4}("58"|"78")(\r\n|[ \t\r\n\f])?|\\v
 %% /* language grammar */
 
 selectors_group
-  : selector ( COMMA S* selector )*
+  : selector
+    {console.log('selectors_group 1');$$ = notImplemented(arguments);}
+  | selectors_group COMMA S* selector
+    {console.log('selectors_group 2');$$ = notImplemented(arguments);}
   ;
 
 selector
-  : simple_selector_sequence ( combinator simple_selector_sequence )*
+  : simple_selector_sequence
+    {console.log('selector 1');$$ = notImplemented(arguments);}
+  | selector combinator simple_selector_sequence
+    {console.log('selector 2');$$ = notImplemented(arguments);}
   ;
 
 combinator
   /* combinators can be surrounded by whitespace */
-  : PLUS S* | GREATER S* | TILDE S* | S+
+  : PLUS S*
+    {console.log('combinator PLUS');$$ = notImplemented(arguments);}
+  | GREATER S*
+    {console.log('combinator GREATER');$$ = notImplemented(arguments);}
+  | TILDE S*
+    {console.log('combinator TILDE');$$ = notImplemented(arguments);}
+  | S+
+    {console.log('combinator S+');$$ = notImplemented(arguments);}
   ;
 
 simple_selector_sequence
   : ( type_selector | universal )
     ( HASH | class | attrib | pseudo | negation )*
+    {console.log('simple_selector_sequence 1');$$ = notImplemented(arguments);}
   | ( HASH | class | attrib | pseudo | negation )+
+    {console.log('simple_selector_sequence 2');$$ = notImplemented(arguments);}
   ;
 
 type_selector
   : ( namespace_prefix )? element_name
+    {console.log('type_selector');$$ = notImplemented(arguments);}
   ;
 
 namespace_prefix
   : ( IDENT | '*' )? '|'
+    {console.log('namespace_prefix');$$ = notImplemented(arguments);}
   ;
 
 element_name
   : IDENT
+    {console.log('element_name');$$ = notImplemented(arguments);}
   ;
 
 universal
   : ( namespace_prefix )? '*'
+    {console.log('universal');$$ = notImplemented(arguments);}
   ;
 
 class
   : '.' IDENT
+    {console.log('class');$$ = notImplemented(arguments);}
   ;
 
 attrib
@@ -117,22 +137,37 @@ pseudo
   /* Note that pseudo-elements are restricted to one per selector and */
   /* occur only in the last simple_selector_sequence. */
   : ':' ':'? ( IDENT | functional_pseudo )
+    {console.log('pseudo');$$ = notImplemented(arguments);}
   ;
 
 functional_pseudo
   : FUNCTION S* expression ')'
+    {console.log('functional_pseudo');$$ = notImplemented(arguments);}
   ;
 
 expression
   /* In CSS3, the expressions are identifiers, strings, */
   /* or of the form "an+b" */
   : ( ( PLUS | '-' | DIMENSION | NUMBER | STRING | IDENT ) S* )+
+    {console.log('expression');$$ = notImplemented(arguments);}
   ;
 
 negation
   : NOT S* negation_arg S* ')'
+    {console.log('negation');$$ = notImplemented(arguments);}
   ;
 
 negation_arg
-  : type_selector | universal | HASH | class | attrib | pseudo
+  : type_selector
+    {console.log('negation_arg type_selector');$$ = notImplemented(arguments);}
+  | universal
+    {console.log('negation_arg universal');$$ = notImplemented(arguments);}
+  | HASH
+    {console.log('negation_arg HASH');$$ = notImplemented(arguments);}
+  | class
+    {console.log('negation_arg typeclass_selector');$$ = notImplemented(arguments);}
+  | attrib
+    {console.log('negation_arg attrib');$$ = notImplemented(arguments);}
+  | pseudo
+    {console.log('negation_arg pseudo');$$ = notImplemented(arguments);}
   ;
