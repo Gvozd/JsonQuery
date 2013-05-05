@@ -27,52 +27,58 @@ V         v|\\0{0,4}("58"|"78")(\r\n|[ \t\r\n\f])?|\\v
 
 %%
 
-[ \t\r\n\f]+     return S;
+[ \t\r\n\f]+     return 'S';
 
-"~="             return INCLUDES;
-"|="             return DASHMATCH;
-"^="             return PREFIXMATCH;
-"$="             return SUFFIXMATCH;
-"*="             return SUBSTRINGMATCH;
-{ident}          return IDENT;
-{string}         return STRING;
-{ident}"("       return FUNCTION;
-{num}            return NUMBER;
-"#"{name}        return HASH;
-{w}"+"           return PLUS;
-{w}">"           return GREATER;
-{w}","           return COMMA;
-{w}"~"           return TILDE;
-":"{N}{O}{T}"("  return NOT;
-@{ident}         return ATKEYWORD;
-{invalid}        return INVALID;
-{num}%           return PERCENTAGE;
-{num}{ident}     return DIMENSION;
-"<!--"           return CDO;
-"-->"            return CDC;
+"~="             return 'INCLUDES';
+"|="             return 'DASHMATCH';
+"^="             return 'PREFIXMATCH';
+"$="             return 'SUFFIXMATCH';
+"*="             return 'SUBSTRINGMATCH';
+{ident}          return 'IDENT';
+{string}         return 'STRING';
+{ident}"("       return 'FUNCTION';
+{num}            return 'NUMBER';
+"#"{name}        return 'HASH';
+{w}"+"           return 'PLUS';
+{w}">"           return 'GREATER';
+{w}","           return 'COMMA';
+{w}"~"           return 'TILDE';
+":"{N}{O}{T}"("  return 'NOT';
+@{ident}         return 'ATKEYWORD';
+{invalid}        return 'INVALID';
+{num}%           return 'PERCENTAGE';
+{num}{ident}     return 'DIMENSION';
+"<!--"           return 'CDO';
+"-->"            return 'CDC';
 
 \/\*[^*]*\*+([^/*][^*]*\*+)*\/                    /* ignore comments */
 
 .                return yytext;
+<<EOF>>               return 'EOF'
 
 /lex
 
-%start selectors_group
+%start full_selector
 %ebnf /* enable EBNF grammar syntax */
 %% /* language grammar */
 
+full_selector
+  : selectors_group EOF
+    {console.log('full_selector');return $1;}
+  ;
+
 selectors_group
   : selector
-    {console.log('selectors_group 1');$$ = notImplemented(arguments);}
+    {console.log('selectors_group 1');$$ = $1;}
   | selectors_group COMMA S* selector
-    {console.log('selectors_group 2');$$ = notImplemented(arguments);}
+    {console.log('selectors_group 2');$$ = createUnionOr($1, $4);}
   ;
 
 selector
   : simple_selector_sequence
-    {console.log('selector 1');$$ = notImplemented(arguments);}
+    {console.log('selector 1');$$ = createUnionOr(createUnionAnd(createFilterRoot(),$1),createSpaceCombinator(createFilterRoot(), $1));}
   | selector combinator simple_selector_sequence
-    {console.log('selector 2');$$ = notImplemented(arguments);}
+    {console.log('selector 2');$$ = $2($1, $3);}
   ;
 
 combinator
@@ -80,26 +86,26 @@ combinator
   : PLUS S*
     {console.log('combinator PLUS');$$ = notImplemented(arguments);}
   | GREATER S*
-    {console.log('combinator GREATER');$$ = notImplemented(arguments);}
+    {console.log('combinator GREATER');$$ = createGreaterCombinator;}
   | TILDE S*
     {console.log('combinator TILDE');$$ = notImplemented(arguments);}
   | S+
-    {console.log('combinator S+');$$ = notImplemented(arguments);}
+    {console.log('combinator S+');$$ = createSpaceCombinator;}
   ;
 
 simple_selector_sequence
   : ( type_selector | universal )
     ( HASH | class | attrib | pseudo | negation )*
-    {console.log('simple_selector_sequence 1');$$ = notImplemented(arguments);}
+    {console.log('simple_selector_sequence 1');$$ = createUnionAnd.apply(null, [$1].concat($2));}
   | ( HASH | class | attrib | pseudo | negation )+
-    {console.log('simple_selector_sequence 2');$$ = notImplemented(arguments);}
+    {console.log('simple_selector_sequence 2');$$ = createUnionAnd.apply(null, $1);}
   ;
 
 type_selector
   : namespace_prefix element_name
     {console.log('type_selector 1');$$ = notImplemented(arguments);}
   | element_name
-    {console.log('type_selector 2');$$ = notImplemented(arguments);}
+    {console.log('type_selector 2');$$ = createFilterType($1);}
   ;
 
 namespace_prefix
@@ -113,19 +119,21 @@ namespace_prefix
 
 element_name
   : IDENT
-    {console.log('element_name');$$ = notImplemented(arguments);}
+    {console.log('element_name');$$ = $1;}
   ;
 
 universal
   : namespace_prefix '*'
     {console.log('universal 1');$$ = notImplemented(arguments);}
   | '*'
-    {console.log('universal 2');$$ = notImplemented(arguments);}
+    {console.log('universal 2');$$ = createFilterAny();}
   ;
 
 class
   : '.' IDENT
-    {console.log('class');$$ = notImplemented(arguments);}
+    {console.log('class');$$ = createFilterName($2);}
+  | '.' STRING
+    {console.log('class');$$ = createFilterName(eval($2));}
   ;
 attrib
   : '[' IDENT ']'

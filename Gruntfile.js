@@ -22,7 +22,8 @@ module.exports = function (grunt) {
                     'lib/grammar.js',
                     'lib/filtering.js',
                     'lib/filters/*.js',
-                    'lib/unions/*.js',
+                    'lib/union/*.js',
+                    'lib/combinator/*.js',
                     'lib/exports.js',
                     'lib/outro.js'
                 ],
@@ -60,7 +61,8 @@ module.exports = function (grunt) {
             lib_test: {
                 src: [
                     'lib/filters/*.js',
-                    'lib/unions/*.js',
+                    'lib/union/*.js',
+                    'lib/combinator/*.js',
                     'lib/filtering.js',
                     'tests/selectors.js'
                 ]
