@@ -2,7 +2,7 @@
     "name": "JsonQuery",
     "title": "JsonQuery",
     "description": "Library for dynamic work with Javascript object",
-    "version": "0.1.0",
+    "version": "0.2.0a",
     "homepage": "https://github.com/Gvozd/JsonQuery/",
     "author": {
         "name": "Gvozdev Viktor",
