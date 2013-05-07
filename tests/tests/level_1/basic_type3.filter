@@ -1,1 +1,1 @@
-unionOr(unionAnd(filterRoot(), filterType("object")),descendantUnion(filterRoot(),filterType("object")))
+unionOr(unionAnd(root(), filterType("object")),spaceCombinator(root(),filterType("object")))

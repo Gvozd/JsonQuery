@@ -1,4 +1,4 @@
-/*! JsonQuery - v0.2.0a - 2013-05-06
+/*! JsonQuery - v0.2.0a - 2013-05-07
 * https://github.com/Gvozd/JsonQuery/
 * Copyright (c) 2013 Gvozdev Viktor; Licensed MIT */
 (function(window, undefined) {
@@ -724,7 +724,7 @@ function createFilterRoot() {
         return {ok: 1 === stack.length};
     };
     filterRoot.toString = function() {
-        return 'filterRoot()';
+        return 'root()';
     };
     return filterRoot;
 }
@@ -838,22 +838,22 @@ function createUnionOr(filter1, filter2) {
 }
 function createGreaterCombinator(filter1, filter2) {// E > F
     'use strict';
-    var childrenUnion, i, args;
+    var greaterCombinator, i, args;
     if (arguments.length > 2) {
-        childrenUnion = createGreaterCombinator(filter1, filter2);
+        greaterCombinator = createGreaterCombinator(filter1, filter2);
         for (i = 2; i < arguments.length; i += 1) {
-            childrenUnion = createGreaterCombinator(childrenUnion, arguments[i]);
+            greaterCombinator = createGreaterCombinator(greaterCombinator, arguments[i]);
         }
         args = Array.prototype.map.call(arguments, JSON.stringify).join(', ');
-        childrenUnion.toString = function () {
-            return 'childrenUnion(' + args + ')';
+        greaterCombinator.toString = function () {
+            return 'greaterCombinator(' + args + ')';
         };
-        return childrenUnion;
+        return greaterCombinator;
     }
     if ('function' !== typeof filter1 || 'function' !== typeof filter2) {
         return null;
     }
-    childrenUnion = function childrenUnion(stack) {
+    greaterCombinator = function greaterCombinator(stack) {
         var filtered1 = filter1(stack.slice());
         if (!filtered1.ok) {
             if ('function' === typeof filtered1.next) {
@@ -881,33 +881,33 @@ function createGreaterCombinator(filter1, filter2) {// E > F
             }
         }
     };
-    childrenUnion.toString = function() {
-        return 'childrenUnion(' + filter1 + ', ' + filter2 + ')';
+    greaterCombinator.toString = function() {
+        return 'greaterCombinator(' + filter1 + ', ' + filter2 + ')';
     };
-    return childrenUnion;
+    return greaterCombinator;
 }
 function createSpaceCombinator(filter1, filter2) {// E F
     'use strict';
-    var descendantUnion, i, args;
+    var spaceCombinator, i, args;
     if (arguments.length > 2) {
-        descendantUnion = createSpaceCombinator(filter1, filter2);
+        spaceCombinator = createSpaceCombinator(filter1, filter2);
         for (i = 2; i < arguments.length; i += 1) {
-            descendantUnion = createSpaceCombinator(descendantUnion, arguments[i]);
+            spaceCombinator = createSpaceCombinator(spaceCombinator, arguments[i]);
         }
         args = Array.prototype.map.call(arguments, JSON.stringify).join(', ');
-        descendantUnion.toString = function () {
-            return 'descendantUnion(' + args + ')';
+        spaceCombinator.toString = function () {
+            return 'spaceCombinator(' + args + ')';
         };
-        return descendantUnion;
+        return spaceCombinator;
     }
     if ('function' !== typeof filter1 || 'function' !== typeof filter2) {
         return null;
     }
-    descendantUnion = createUnionOr(createGreaterCombinator(filter1, filter2), createGreaterCombinator(filter1, createFilterDeeperAny(), filter2));
-    descendantUnion.toString = function () {
-        return 'descendantUnion(' + filter1 + ',' + filter2 + ')';
+    spaceCombinator = createUnionOr(createGreaterCombinator(filter1, filter2), createGreaterCombinator(filter1, createFilterDeeperAny(), filter2));
+    spaceCombinator.toString = function () {
+        return 'spaceCombinator(' + filter1 + ',' + filter2 + ')';
     };
-    return descendantUnion;
+    return spaceCombinator;
 }
 function JsonQuery(selector, data) {
     'use strict';

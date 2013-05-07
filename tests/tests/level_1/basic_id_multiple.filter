@@ -1,1 +1,1 @@
-unionOr(unionAnd(filterRoot(), filterName("language")),descendantUnion(filterRoot(),filterName("language")))
+unionOr(unionAnd(root(), filterName("language")),spaceCombinator(root(),filterName("language")))

@@ -1,1 +1,1 @@
-unionOr(unionAnd(filterRoot(), filterName("weight")),descendantUnion(filterRoot(),filterName("weight")))
+unionOr(unionAnd(root(), filterName("weight")),spaceCombinator(root(),filterName("weight")))

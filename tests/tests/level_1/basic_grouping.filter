@@ -1,1 +1,1 @@
-unionOr(unionOr(unionAnd(filterRoot(), unionAnd(filterType("string"), filterName("level"))),descendantUnion(filterRoot(),unionAnd(filterType("string"), filterName("level")))),unionOr(unionAnd(filterRoot(), filterType("number")),descendantUnion(filterRoot(),filterType("number"))))
+unionOr(unionOr(unionAnd(root(), unionAnd(filterType("string"), filterName("level"))),spaceCombinator(root(),unionAnd(filterType("string"), filterName("level")))),unionOr(unionAnd(root(), filterType("number")),spaceCombinator(root(),filterType("number"))))

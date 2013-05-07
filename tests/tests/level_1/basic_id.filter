@@ -1,1 +1,1 @@
-unionOr(unionAnd(filterRoot(), filterName("favoriteColor")),descendantUnion(filterRoot(),filterName("favoriteColor")))
+unionOr(unionAnd(root(), filterName("favoriteColor")),spaceCombinator(root(),filterName("favoriteColor")))
