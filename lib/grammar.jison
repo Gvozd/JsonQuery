@@ -36,7 +36,6 @@ V         v|\\0{0,4}("58"|"78")(\r\n|[ \t\r\n\f])?|\\v
 "*="             return 'SUBSTRINGMATCH';
 {ident}          return 'IDENT';
 {string}         return 'STRING';
-{ident}"("       return 'FUNCTION';
 {num}            return 'NUMBER';
 "#"{name}        return 'HASH';
 {w}"+"           return 'PLUS';
@@ -157,25 +156,25 @@ pseudo
   /* Note that pseudo-elements are restricted to one per selector and */
   /* occur only in the last simple_selector_sequence. */
   : ':' IDENT
-    {console.log('pseudo', $2);$$ = getPseudoFilter($2);}
+    {console.log('pseudo 1', $2);$$ = getPseudoFilter($2);}
   | ':' ':' IDENT
-    {console.log('pseudo', $3);$$ = getPseudoFilter($3);}
+    {console.log('pseudo 2', $3);$$ = getPseudoFilter($3);}
   | ':' functional_pseudo
-    {console.log('pseudo');$$ = notImplemented(arguments);}
+    {console.log('pseudo 3');$$ = $2;}
   | ':' ':' functional_pseudo
-    {console.log('pseudo');$$ = notImplemented(arguments);}
+    {console.log('pseudo 4');$$ = $3;}
   ;
 
 functional_pseudo
-  : FUNCTION S* expression ')'
-    {console.log('functional_pseudo');$$ = notImplemented(arguments);}
+  : IDENT '(' S* expression ')'
+    {console.log('functional_pseudo', $1);$$ = getFunctionalPseudoFilter($1, $4);}
   ;
 
 expression
   /* In CSS3, the expressions are identifiers, strings, */
   /* or of the form "an+b" */
   : ( ( PLUS | '-' | DIMENSION | NUMBER | STRING | IDENT ) S* )+
-    {console.log('expression');$$ = notImplemented(arguments);}
+    {console.log('expression');$$ = $$.join('');}
   ;
 
 negation
