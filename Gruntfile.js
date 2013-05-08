@@ -24,6 +24,7 @@ module.exports = function (grunt) {
                     'lib/filters/*.js',
                     'lib/union/*.js',
                     'lib/combinator/*.js',
+                    'lib/pseudo/*.js',
                     'lib/exports.js',
                     'lib/outro.js'
                 ],
@@ -63,6 +64,7 @@ module.exports = function (grunt) {
                     'lib/filters/*.js',
                     'lib/union/*.js',
                     'lib/combinator/*.js',
+                    'lib/pseudo/*.js',
                     'lib/filtering.js',
                     'tests/selectors.js'
                 ]

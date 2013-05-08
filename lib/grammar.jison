@@ -156,7 +156,13 @@ pseudo
   /* Exceptions: :first-line, :first-letter, :before and :after. */
   /* Note that pseudo-elements are restricted to one per selector and */
   /* occur only in the last simple_selector_sequence. */
-  : ':' ':'? ( IDENT | functional_pseudo )
+  : ':' IDENT
+    {console.log('pseudo', $2);$$ = getPseudoFilter($2);}
+  | ':' ':' IDENT
+    {console.log('pseudo', $3);$$ = getPseudoFilter($3);}
+  | ':' functional_pseudo
+    {console.log('pseudo');$$ = notImplemented(arguments);}
+  | ':' ':' functional_pseudo
     {console.log('pseudo');$$ = notImplemented(arguments);}
   ;
 
