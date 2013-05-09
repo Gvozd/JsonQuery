@@ -25,6 +25,7 @@ module.exports = function (grunt) {
                     'lib/union/*.js',
                     'lib/combinator/*.js',
                     'lib/pseudo/*.js',
+                    'lib/utility/*.js',
                     'lib/exports.js',
                     'lib/outro.js'
                 ],
@@ -65,6 +66,7 @@ module.exports = function (grunt) {
                     'lib/union/*.js',
                     'lib/combinator/*.js',
                     'lib/pseudo/*.js',
+                    'lib/utility/*.js',
                     'lib/exports.js',
                     'lib/filtering.js',
                     'tests/selectors.js'
@@ -72,7 +74,10 @@ module.exports = function (grunt) {
             }
         },
         nodeunit: {
-            files: ['tests/selectors.js']
+            files: [
+                'tests/selectors.js',
+                'tests/options.js'
+            ]
         },
         watch: {
             gruntfile: {
