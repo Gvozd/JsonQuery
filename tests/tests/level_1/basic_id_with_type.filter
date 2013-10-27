@@ -1,1 +1,0 @@
-unionOr(unionAnd(root(), unionAnd(filterType("string"), filterName("favoriteColor"))),spaceCombinator(root(),unionAnd(filterType("string"), filterName("favoriteColor"))))

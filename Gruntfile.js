@@ -68,14 +68,12 @@ module.exports = function (grunt) {
                     'lib/pseudo/*.js',
                     'lib/utility/*.js',
                     'lib/exports.js',
-                    'lib/filtering.js',
-                    'tests/selectors.js'
+                    'lib/filtering.js'
                 ]
             }
         },
         nodeunit: {
             files: [
-                'tests/selectors.js',
                 'tests/options.js'
             ]
         },

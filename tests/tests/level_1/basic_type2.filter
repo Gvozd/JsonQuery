@@ -1,1 +1,0 @@
-unionOr(unionAnd(root(), filterType("number")),spaceCombinator(root(),filterType("number")))

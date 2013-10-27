@@ -1,1 +1,0 @@
-unionOr(unionAnd(root(), filterName("weight")),spaceCombinator(root(),filterName("weight")))

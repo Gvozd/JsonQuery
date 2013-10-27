@@ -1,1 +1,0 @@
-spaceCombinator(unionOr(unionAnd(root(), filterName("object")),spaceCombinator(root(),filterName("object"))),filterName("string"))

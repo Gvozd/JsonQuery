@@ -1,1 +1,0 @@
-unionOr(unionAnd(root(), unionAnd(filterType("string"), firstChild())),spaceCombinator(root(),unionAnd(filterType("string"), firstChild())))
