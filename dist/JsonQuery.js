@@ -1,4 +1,4 @@
-/*! JsonQuery - v0.2.0 - 2013-10-27
+/*! JsonQuery - v0.2.0 - 2013-10-28
 * https://github.com/Gvozd/JsonQuery/
 * Copyright (c) 2013 Gvozdev Viktor; Licensed MIT */
 (function(window, undefined) {
@@ -1237,6 +1237,13 @@ function JsonQuery(selector, data, options) {
     Object.defineProperty(this, 'filter', {
         enumerable: false,
         value: filter
+    });
+    Object.defineProperty(this, 'splice', {
+        enumerable: false,
+        value: function() {
+            //need for array-like view in console
+            throw new Error('dummy method');
+        }
     });
     return this;
 }
