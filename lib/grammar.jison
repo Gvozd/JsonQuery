@@ -63,91 +63,91 @@ V         v|\\0{0,4}("58"|"78")(\r\n|[ \t\r\n\f])?|\\v
 
 full_selector
   : selectors_group EOF
-    {console.log('full_selector');return $1;}
+    {return $1;}
   ;
 
 selectors_group
   : selector
-    {console.log('selectors_group 1');$$ = $1;}
+    {$$ = $1;}
   | selectors_group COMMA S* selector
-    {console.log('selectors_group 2');$$ = createUnionOr($1, $4);}
+    {$$ = createUnionOr($1, $4);}
   ;
 
 selector
   : simple_selector_sequence
-    {console.log('selector 1');$$ = createUnionOr(createUnionAnd(createFilterRoot(),$1),createSpaceCombinator(createFilterRoot(), $1));}
+    {$$ = createUnionOr(createUnionAnd(createFilterRoot(),$1),createSpaceCombinator(createFilterRoot(), $1));}
   | selector combinator simple_selector_sequence
-    {console.log('selector 2');$$ = $2($1, $3);}
+    {$$ = $2($1, $3);}
   ;
 
 combinator
   /* combinators can be surrounded by whitespace */
   : PLUS S*
-    {console.log('combinator PLUS');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   | GREATER S*
-    {console.log('combinator GREATER');$$ = createGreaterCombinator;}
+    {$$ = createGreaterCombinator;}
   | TILDE S*
-    {console.log('combinator TILDE');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   | S+
-    {console.log('combinator S+');$$ = createSpaceCombinator;}
+    {$$ = createSpaceCombinator;}
   ;
 
 simple_selector_sequence
   : ( type_selector | universal )
     ( HASH | class | attrib | pseudo | negation )*
-    {console.log('simple_selector_sequence 1');$$ = createUnionAnd.apply(null, [$1].concat($2));}
+    {$$ = createUnionAnd.apply(null, [$1].concat($2));}
   | ( HASH | class | attrib | pseudo | negation )+
-    {console.log('simple_selector_sequence 2');$$ = createUnionAnd.apply(null, $1);}
+    {$$ = createUnionAnd.apply(null, $1);}
   ;
 
 type_selector
   : namespace_prefix element_name
-    {console.log('type_selector 1');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   | element_name
-    {console.log('type_selector 2');$$ = createFilterType($1);}
+    {$$ = createFilterType($1);}
   ;
 
 namespace_prefix
   : IDENT '|'
-    {console.log('namespace_prefix 1');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   | '*' '|'
-    {console.log('namespace_prefix 2');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   | '|'
-    {console.log('namespace_prefix 3');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   ;
 
 element_name
   : IDENT
-    {console.log('element_name');$$ = $1;}
+    {$$ = $1;}
   ;
 
 universal
   : namespace_prefix '*'
-    {console.log('universal 1');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   | '*'
-    {console.log('universal 2');$$ = createFilterAny();}
+    {$$ = createFilterAny();}
   ;
 
 class
   : '.' IDENT
-    {console.log('class');$$ = createFilterName($2);}
+    {$$ = createFilterName($2);}
   | '.' STRING
-    {console.log('class');$$ = createFilterName(eval($2));}
+    {$$ = createFilterName(eval($2));}
   ;
 attrib
   : '[' IDENT ']'
-    {console.log('fake attrib');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
 ;
 
 attrib2
   : '[' 'S*' namespace_prefix IDENT 'S*' ( PREFIXMATCH | SUFFIXMATCH | SUBSTRINGMATCH | '=' | INCLUDES | DASHMATCH ) 'S*' ( IDENT | STRING ) 'S*' ']'
-    {console.log('attrib 1');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   | '[' 'S*' namespace_prefix IDENT 'S*' ']'
-    {console.log('attrib 2');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   | '[' 'S*' IDENT 'S*' ( PREFIXMATCH | SUFFIXMATCH | SUBSTRINGMATCH | '=' | INCLUDES | DASHMATCH ) 'S*' ( IDENT | STRING ) 'S*' ']'
-    {console.log('attrib 3');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   | '[' 'S*' IDENT 'S*'  ']'
-    {console.log('attrib 4');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   ;
 
 pseudo
@@ -156,43 +156,43 @@ pseudo
   /* Note that pseudo-elements are restricted to one per selector and */
   /* occur only in the last simple_selector_sequence. */
   : ':' IDENT
-    {console.log('pseudo 1', $2);$$ = getPseudoFilter($2);}
+    {$$ = getPseudoFilter($2);}
   | ':' ':' IDENT
-    {console.log('pseudo 2', $3);$$ = getPseudoFilter($3);}
+    {$$ = getPseudoFilter($3);}
   | ':' functional_pseudo
-    {console.log('pseudo 3');$$ = $2;}
+    {$$ = $2;}
   | ':' ':' functional_pseudo
-    {console.log('pseudo 4');$$ = $3;}
+    {$$ = $3;}
   ;
 
 functional_pseudo
   : IDENT '(' S* expression ')'
-    {console.log('functional_pseudo', $1);$$ = getFunctionalPseudoFilter($1, $4);}
+    {$$ = getFunctionalPseudoFilter($1, $4);}
   ;
 
 expression
   /* In CSS3, the expressions are identifiers, strings, */
   /* or of the form "an+b" */
   : ( ( PLUS | '-' | DIMENSION | NUMBER | STRING | IDENT ) S* )+
-    {console.log('expression');$$ = $$.join('');}
+    {$$ = $$.join('');}
   ;
 
 negation
   : NOT S* negation_arg S* ')'
-    {console.log('negation');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   ;
 
 negation_arg
   : type_selector
-    {console.log('negation_arg type_selector');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   | universal
-    {console.log('negation_arg universal');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   | HASH
-    {console.log('negation_arg HASH');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   | class
-    {console.log('negation_arg typeclass_selector');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   | attrib
-    {console.log('negation_arg attrib');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   | pseudo
-    {console.log('negation_arg pseudo');$$ = notImplemented(arguments);}
+    {$$ = notImplemented(arguments);}
   ;
