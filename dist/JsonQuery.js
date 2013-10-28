@@ -888,89 +888,75 @@ function createFilterType(type) {
     };
     return filterType;
 }
-function createUnionAnd(filter1, filter2) {
+function createUnionAnd() {
     'use strict';
-    var unionAnd, i, args;
-    if (arguments.length === 1) {
-        return filter1;
-    } else if (arguments.length > 2) {
-        unionAnd = createUnionAnd(filter1, filter2);
-        for (i = 2; i < arguments.length; i += 1) {
-            unionAnd = createUnionAnd(unionAnd, arguments[i]);
-        }
-        args = Array.prototype.map.call(arguments, JSON.stringify).join(', ');
-        unionAnd.toString = function () {
-            return 'unionAnd(' + args + ')';
-        };
-        return unionAnd;
-    }
-    if ('function' !== typeof filter1 || 'function' !== typeof filter2) {
+    var unionAnd, args, argsList;
+    args = Array.prototype.filter.call(arguments, function(filter) {
+        return 'function' === typeof filter;
+    });
+    if (args.length === 0) {
         return null;
+    } else if (args.length === 1) {
+        return args[0];
     }
     unionAnd = function unionAnd(stack) {
-        var filtered1, filtered2;
-        filtered1 = filter1(stack.slice());
-        filtered2 = filter2(stack.slice());
-        if (filtered1.ok && filtered2.ok) {
-            return {
-                ok: true,
-                next: createUnionAnd(filtered1.next, filtered2.next)
-            };
-        } else {
-            return {
-                ok: false,
-                next: createUnionAnd(filtered1.next, filtered2.next)
-            };
+        var filtered = [], next = [], i;
+        for(i = 0; i < args.length; i++) {
+            filtered[i] = args[i](stack.slice());
+            next[i] = filtered[i].next;
         }
+        for(i = 0; i < args.length; i++) {
+            if(!filtered[i].ok) {
+                return {
+                    ok: false,
+                    next: createUnionAnd.apply(null, next)
+                };
+            }
+        }
+        return {
+            ok: true,
+            next: createUnionAnd.apply(null, next)
+        };
     };
-    unionAnd.toString = function () {
-        return 'unionAnd(' + filter1 + ', ' + filter2 + ')';
+    argsList = args.join(', ');
+    unionAnd.toString = function() {
+        return 'unionAnd(' + argsList + ')';
     };
     return unionAnd;
 }
-function createUnionOr(filter1, filter2) {
+function createUnionOr() {
     'use strict';
-    var unionOr, i, args;
-    if (arguments.length === 1) {
-        return filter1;
-    } else if (arguments.length > 2) {
-        unionOr = createUnionOr(filter1, filter2);
-        for (i = 2; i < arguments.length; i += 1) {
-            unionOr = createUnionOr(unionOr, arguments[i]);
-        }
-        args = Array.prototype.map.call(arguments, JSON.stringify).join(', ');
-        unionOr.toString = function () {
-            return 'unionOr(' + args + ')';
-        };
-        return unionOr;
-    }
-    if ('function' === typeof filter1 && 'function' !== typeof filter2) {
-        return filter1;
-    }
-    if ('function' !== typeof filter1 && 'function' === typeof filter2) {
-        return filter2;
-    }
-    if ('function' !== typeof filter1 && 'function' !== typeof filter2) {
+    var unionOr, args, argsList;
+    args = Array.prototype.filter.call(arguments, function(filter) {
+        return 'function' === typeof filter;
+    });
+    if (args.length === 0) {
         return null;
+    } else if (args.length === 1) {
+        return args[0];
     }
     unionOr = function unionOr(stack) {
-        var filtered1, filtered2;
-        filtered1 = filter1(stack.slice());
-        filtered2 = filter2(stack.slice());
-        if (filtered1.ok || filtered2.ok) {
-            return {
-                ok: true,
-                next: createUnionOr(filtered1.next, filtered2.next)
-            };
-        } else {
-            return {
-                ok: false,
-                next: createUnionOr(filtered1.next, filtered2.next)
-            };
+        var filtered = [], next = [], i;
+        for(i = 0; i < args.length; i++) {
+            filtered[i] = args[i](stack.slice());
+            next[i] = filtered[i].next;
         }
+        for(i = 0; i < args.length; i++) {
+            if(filtered[i].ok) {
+                return {
+                    ok: true,
+                    next: createUnionOr.apply(null, next)
+                };
+            }
+        }
+        return {
+            ok: false,
+            next: createUnionOr.apply(null, next)
+        };
     };
+    argsList = args.join(', ');
     unionOr.toString = function() {
-        return 'unionOr(' + filter1 + ',' + filter2 + ')';
+        return 'unionOr(' + argsList + ')';
     };
     return unionOr;
 }
