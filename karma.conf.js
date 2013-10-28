@@ -9,16 +9,19 @@ module.exports = function (config) {
 
 
         // frameworks to use
-        frameworks: ['jasmine', 'chai'],
+        frameworks: ['jasmine', 'requirejs', 'chai'],
 
 
         // list of files / patterns to load in the browser
         files: [
             "./dist/JsonQuery.js",
-            "./tests/init.js",
-            "./tests/level_1.js",
-            "./tests/level_2.js",
-            "./tests/level_3.js"
+//            "./tests/init.js",
+//            "./tests/level_1.js",
+//            "./tests/level_2.js",
+//            "./tests/level_3.js"
+            {pattern: 'lib2/**/*.js', included: false},
+            {pattern: 'tests/*Spec.js', included: false},
+            'tests/main.js'
         ],
 
 
@@ -58,7 +61,7 @@ module.exports = function (config) {
         // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
         // - PhantomJS
         // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-        browsers: ['PhantomJS'/*, 'Chrome'*/],
+        browsers: ['PhantomJS', 'Chrome'],
 
 
         // If browser does not capture in given timeout [ms], kill it
