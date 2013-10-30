@@ -14,17 +14,10 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-//            "./dist/JsonQuery.js",
-//            "./tests/init.js",
-//            "./tests/level_1.js",
-//            "./tests/level_2.js",
-//            "./tests/level_3.js"
             {pattern: 'lib/*.js', included: false},
             {pattern: 'lib/**/*.js', included: false},
-            {pattern: 'lib2/**/*.js', included: false},
             'tests/main.js',
             {pattern: 'tests/*.js', included: false}
-
         ],
 
 
@@ -64,7 +57,7 @@ module.exports = function (config) {
         // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
         // - PhantomJS
         // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-        browsers: ['PhantomJS', 'Chrome'],
+        browsers: ['PhantomJS'/*, 'Chrome'*/],
 
 
         // If browser does not capture in given timeout [ms], kill it
