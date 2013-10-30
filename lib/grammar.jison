@@ -5,11 +5,11 @@ var createGreaterCombinator, createSpaceCombinator, createFilterAny, createFilte
 define(function(require, exports, module) {
     createGreaterCombinator = require('combinator/createGreaterCombinator');
     createSpaceCombinator = require('combinator/createSpaceCombinator');
-    createFilterAny = require('filters/any');
-    createFilterDeeperAny = require('filters/deeperAny');
-    createFilterName = require('filters/name');
+    createFilterAny = require('filters/createFilterAny');
+    createFilterDeeperAny = require('filters/createFilterName');
+    createFilterName = require('filters/createFilterName');
     notImplemented = require('filters/notImplemented');
-    createFilterType = require('filters/type');
+    createFilterType = require('filters/createFilterType');
     createFilterFirstChild = require('pseudo/createFilterFirstChild');
     createFilterLastChild = require('pseudo/createFilterLastChild');
     createFilterNthChild = require('pseudo/createFilterNthChild');
