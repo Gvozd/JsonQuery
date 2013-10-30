@@ -1,7 +1,7 @@
-define(['lib2/qwe'], function(qwe) {
+define(['JsonQuery'], function(qwe) {
     describe('qwe', function() {
         it('asd', function() {
-            assert.isTrue(qwe.asd);
+            assert.isTrue(true);
         });
     });
 });

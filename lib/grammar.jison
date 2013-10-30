@@ -1,3 +1,21 @@
+%{
+var createGreaterCombinator = require('combinator/createGreaterCombinator'),
+    createSpaceCombinator = require('combinator/createSpaceCombinator'),
+    createFilterAny = require('filters/any'),
+    createFilterDeeperAny = require('filters/deeperAny'),
+    createFilterName = require('filters/name'),
+    notImplemented = require('filters/notImplemented'),
+    createFilterType = require('filters/type'),
+    createFilterFirstChild = require('pseudo/createFilterFirstChild'),
+    createFilterLastChild = require('pseudo/createFilterLastChild'),
+    createFilterNthChild = require('pseudo/createFilterNthChild'),
+    createFilterNthLastChild = require('pseudo/createFilterNthLastChild'),
+    createFilterRoot = require('pseudo/createFilterRoot'),
+    getFunctionalPseudoFilter = require('pseudo/getFunctionalPseudoFilter'),
+    getPseudoFilter = require('pseudo/getPseudoFilter'),
+    createUnionAnd = require('union/createUnionAnd'),
+    createUnionOr = require('union/createUnionOr');
+%}
 %lex
 
 ident     [-]?{nmstart}{nmchar}*

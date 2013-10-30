@@ -15,255 +15,17 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 /*global describe, it, assert*/
-describe('level_1', function () {
-    'use strict';
-    describe('basic', function () {
-        var data = {
-            "name": {
-                "first": "Lloyd",
-                "last": "Hilaiel"
-            },
-            "favoriteColor": "yellow",
-            "languagesSpoken": [
-                {
-                    "language": "Bulgarian",
-                    "level": "advanced"
-                },
-                {
-                    "language": "English",
-                    "level": "native"
-                },
-                {
-                    "language": "Spanish",
-                    "level": "beginner"
-                }
-            ],
-            "seatingPreference": [
-                "window",
-                "aisle"
-            ],
-            "drinkPreference": [
-                "beer",
-                "whiskey",
-                "wine"
-            ],
-            "weight": 172
-        };
-
-        it("first-child", function () {
-            assert.deepEqual(new JsonQuery("string:first-child", data), [
-                "window",
-                "beer"
-            ]);
-        });
-
-        it("grouping", function () {
-            assert.deepEqual(new JsonQuery("string.level,number", data), [
-                "advanced",
-                "native",
-                "beginner",
-                172
-            ]);
-        });
-
-        it("id", function () {
-            assert.deepEqual(new JsonQuery(".favoriteColor", data), [
-                "yellow"
-            ]);
-        });
-
-        it("id_multiple", function () {
-            assert.deepEqual(new JsonQuery(".language", data), [
-                "Bulgarian",
-                "English",
-                "Spanish"
-            ]);
-        });
-
-        it("id_quotes", function () {
-            assert.deepEqual(new JsonQuery(".\"weight\"", data), [
-                172
-            ]);
-        });
-
-        it("id_with_type", function () {
-            assert.deepEqual(new JsonQuery("string.favoriteColor", data), [
-                "yellow"
-            ]);
-        });
-
-        it("last-child", function () {
-            assert.deepEqual(new JsonQuery("string:last-child", data), [
-                "aisle",
-                "wine"
-            ]);
-        });
-
-        it("nth-child-2", function () {
-            assert.deepEqual(new JsonQuery("string:nth-child(-n+2)", data), [
-                "window",
-                "aisle",
-                "beer",
-                "whiskey"
-            ]);
-        });
-
-        it("nth-child", function () {
-            assert.deepEqual(new JsonQuery("string:nth-child(odd)", data), [
-                "window",
-                "beer",
-                "wine"
-            ]);
-        });
-
-        it("nth-last-child", function () {
-            assert.deepEqual(new JsonQuery("string:nth-last-child(1)", data), [
-                "aisle",
-                "wine"
-            ]);
-        });
-
-        it("root_pseudo", function () {
-            assert.deepEqual(new JsonQuery(":root", data), [
-                {
-                    "name": {
-                        "first": "Lloyd",
-                        "last": "Hilaiel"
-                    },
-                    "favoriteColor": "yellow",
-                    "languagesSpoken": [
-                        {
-                            "language": "Bulgarian",
-                            "level": "advanced"
-                        },
-                        {
-                            "language": "English",
-                            "level": "native"
-                        },
-                        {
-                            "language": "Spanish",
-                            "level": "beginner"
-                        }
-                    ],
-                    "seatingPreference": [
-                        "window",
-                        "aisle"
-                    ],
-                    "drinkPreference": [
-                        "beer",
-                        "whiskey",
-                        "wine"
-                    ],
-                    "weight": 172
-                }
-            ]);
-        });
-
-        it("type", function () {
-            assert.deepEqual(new JsonQuery("string", data), [
-                "Lloyd",
-                "Hilaiel",
-                "yellow",
-                "Bulgarian",
-                "advanced",
-                "English",
-                "native",
-                "Spanish",
-                "beginner",
-                "window",
-                "aisle",
-                "beer",
-                "whiskey",
-                "wine"
-            ]);
-        });
-
-        it("type2", function () {
-            assert.deepEqual(new JsonQuery("number", data), [
-                172
-            ]);
-        });
-
-        it("type3", function () {
-            assert.deepEqual(new JsonQuery("object", data), [
-                {
+define(['JsonQuery'], function(JsonQuery) {
+    describe('level_1', function () {
+        'use strict';
+        describe('basic', function () {
+            var data = {
+                "name": {
                     "first": "Lloyd",
                     "last": "Hilaiel"
                 },
-                {
-                    "language": "Bulgarian",
-                    "level": "advanced"
-                },
-                {
-                    "language": "English",
-                    "level": "native"
-                },
-                {
-                    "language": "Spanish",
-                    "level": "beginner"
-                },
-                {
-                    "name": {
-                        "first": "Lloyd",
-                        "last": "Hilaiel"
-                    },
-                    "favoriteColor": "yellow",
-                    "languagesSpoken": [
-                        {
-                            "language": "Bulgarian",
-                            "level": "advanced"
-                        },
-                        {
-                            "language": "English",
-                            "level": "native"
-                        },
-                        {
-                            "language": "Spanish",
-                            "level": "beginner"
-                        }
-                    ],
-                    "seatingPreference": [
-                        "window",
-                        "aisle"
-                    ],
-                    "drinkPreference": [
-                        "beer",
-                        "whiskey",
-                        "wine"
-                    ],
-                    "weight": 172
-                }
-            ]);
-        });
-
-        it("universal", function () {
-            assert.deepEqual(new JsonQuery("*", data), [
-                "Lloyd",
-                "Hilaiel",
-                {
-                    "first": "Lloyd",
-                    "last": "Hilaiel"
-                },
-                "yellow",
-                "Bulgarian",
-                "advanced",
-                {
-                    "language": "Bulgarian",
-                    "level": "advanced"
-                },
-                "English",
-                "native",
-                {
-                    "language": "English",
-                    "level": "native"
-                },
-                "Spanish",
-                "beginner",
-                {
-                    "language": "Spanish",
-                    "level": "beginner"
-                },
-                [
+                "favoriteColor": "yellow",
+                "languagesSpoken": [
                     {
                         "language": "Bulgarian",
                         "level": "advanced"
@@ -277,28 +39,232 @@ describe('level_1', function () {
                         "level": "beginner"
                     }
                 ],
-                "window",
-                "aisle",
-                [
+                "seatingPreference": [
                     "window",
                     "aisle"
                 ],
-                "beer",
-                "whiskey",
-                "wine",
-                [
+                "drinkPreference": [
                     "beer",
                     "whiskey",
                     "wine"
                 ],
-                172,
-                {
-                    "name": {
+                "weight": 172
+            };
+
+            it("first-child", function () {
+                assert.deepEqual(new JsonQuery("string:first-child", data), [
+                    "window",
+                    "beer"
+                ]);
+            });
+
+            it("grouping", function () {
+                assert.deepEqual(new JsonQuery("string.level,number", data), [
+                    "advanced",
+                    "native",
+                    "beginner",
+                    172
+                ]);
+            });
+
+            it("id", function () {
+                assert.deepEqual(new JsonQuery(".favoriteColor", data), [
+                    "yellow"
+                ]);
+            });
+
+            it("id_multiple", function () {
+                assert.deepEqual(new JsonQuery(".language", data), [
+                    "Bulgarian",
+                    "English",
+                    "Spanish"
+                ]);
+            });
+
+            it("id_quotes", function () {
+                assert.deepEqual(new JsonQuery(".\"weight\"", data), [
+                    172
+                ]);
+            });
+
+            it("id_with_type", function () {
+                assert.deepEqual(new JsonQuery("string.favoriteColor", data), [
+                    "yellow"
+                ]);
+            });
+
+            it("last-child", function () {
+                assert.deepEqual(new JsonQuery("string:last-child", data), [
+                    "aisle",
+                    "wine"
+                ]);
+            });
+
+            it("nth-child-2", function () {
+                assert.deepEqual(new JsonQuery("string:nth-child(-n+2)", data), [
+                    "window",
+                    "aisle",
+                    "beer",
+                    "whiskey"
+                ]);
+            });
+
+            it("nth-child", function () {
+                assert.deepEqual(new JsonQuery("string:nth-child(odd)", data), [
+                    "window",
+                    "beer",
+                    "wine"
+                ]);
+            });
+
+            it("nth-last-child", function () {
+                assert.deepEqual(new JsonQuery("string:nth-last-child(1)", data), [
+                    "aisle",
+                    "wine"
+                ]);
+            });
+
+            it("root_pseudo", function () {
+                assert.deepEqual(new JsonQuery(":root", data), [
+                    {
+                        "name": {
+                            "first": "Lloyd",
+                            "last": "Hilaiel"
+                        },
+                        "favoriteColor": "yellow",
+                        "languagesSpoken": [
+                            {
+                                "language": "Bulgarian",
+                                "level": "advanced"
+                            },
+                            {
+                                "language": "English",
+                                "level": "native"
+                            },
+                            {
+                                "language": "Spanish",
+                                "level": "beginner"
+                            }
+                        ],
+                        "seatingPreference": [
+                            "window",
+                            "aisle"
+                        ],
+                        "drinkPreference": [
+                            "beer",
+                            "whiskey",
+                            "wine"
+                        ],
+                        "weight": 172
+                    }
+                ]);
+            });
+
+            it("type", function () {
+                assert.deepEqual(new JsonQuery("string", data), [
+                    "Lloyd",
+                    "Hilaiel",
+                    "yellow",
+                    "Bulgarian",
+                    "advanced",
+                    "English",
+                    "native",
+                    "Spanish",
+                    "beginner",
+                    "window",
+                    "aisle",
+                    "beer",
+                    "whiskey",
+                    "wine"
+                ]);
+            });
+
+            it("type2", function () {
+                assert.deepEqual(new JsonQuery("number", data), [
+                    172
+                ]);
+            });
+
+            it("type3", function () {
+                assert.deepEqual(new JsonQuery("object", data), [
+                    {
                         "first": "Lloyd",
                         "last": "Hilaiel"
                     },
-                    "favoriteColor": "yellow",
-                    "languagesSpoken": [
+                    {
+                        "language": "Bulgarian",
+                        "level": "advanced"
+                    },
+                    {
+                        "language": "English",
+                        "level": "native"
+                    },
+                    {
+                        "language": "Spanish",
+                        "level": "beginner"
+                    },
+                    {
+                        "name": {
+                            "first": "Lloyd",
+                            "last": "Hilaiel"
+                        },
+                        "favoriteColor": "yellow",
+                        "languagesSpoken": [
+                            {
+                                "language": "Bulgarian",
+                                "level": "advanced"
+                            },
+                            {
+                                "language": "English",
+                                "level": "native"
+                            },
+                            {
+                                "language": "Spanish",
+                                "level": "beginner"
+                            }
+                        ],
+                        "seatingPreference": [
+                            "window",
+                            "aisle"
+                        ],
+                        "drinkPreference": [
+                            "beer",
+                            "whiskey",
+                            "wine"
+                        ],
+                        "weight": 172
+                    }
+                ]);
+            });
+
+            it("universal", function () {
+                assert.deepEqual(new JsonQuery("*", data), [
+                    "Lloyd",
+                    "Hilaiel",
+                    {
+                        "first": "Lloyd",
+                        "last": "Hilaiel"
+                    },
+                    "yellow",
+                    "Bulgarian",
+                    "advanced",
+                    {
+                        "language": "Bulgarian",
+                        "level": "advanced"
+                    },
+                    "English",
+                    "native",
+                    {
+                        "language": "English",
+                        "level": "native"
+                    },
+                    "Spanish",
+                    "beginner",
+                    {
+                        "language": "Spanish",
+                        "level": "beginner"
+                    },
+                    [
                         {
                             "language": "Bulgarian",
                             "level": "advanced"
@@ -312,45 +278,81 @@ describe('level_1', function () {
                             "level": "beginner"
                         }
                     ],
-                    "seatingPreference": [
+                    "window",
+                    "aisle",
+                    [
                         "window",
                         "aisle"
                     ],
-                    "drinkPreference": [
+                    "beer",
+                    "whiskey",
+                    "wine",
+                    [
                         "beer",
                         "whiskey",
                         "wine"
                     ],
-                    "weight": 172
+                    172,
+                    {
+                        "name": {
+                            "first": "Lloyd",
+                            "last": "Hilaiel"
+                        },
+                        "favoriteColor": "yellow",
+                        "languagesSpoken": [
+                            {
+                                "language": "Bulgarian",
+                                "level": "advanced"
+                            },
+                            {
+                                "language": "English",
+                                "level": "native"
+                            },
+                            {
+                                "language": "Spanish",
+                                "level": "beginner"
+                            }
+                        ],
+                        "seatingPreference": [
+                            "window",
+                            "aisle"
+                        ],
+                        "drinkPreference": [
+                            "beer",
+                            "whiskey",
+                            "wine"
+                        ],
+                        "weight": 172
+                    }
+                ]);
+            });
+        });
+
+        describe('collision', function () {
+            var data = {
+                "object": {
+                    "string": "some string",
+                    "stringTwo": "some other string"
                 }
-            ]);
-        });
-    });
+            };
 
-    describe('collision', function () {
-        var data = {
-            "object": {
-                "string": "some string",
-                "stringTwo": "some other string"
-            }
-        };
-        
-        it("nested", function() {
-            assert.deepEqual(new JsonQuery(".object .string", data), [
-                "some string"
-            ]);
-        });
+            it("nested", function() {
+                assert.deepEqual(new JsonQuery(".object .string", data), [
+                    "some string"
+                ]);
+            });
 
-        it("quoted-string", function() {
-            assert.deepEqual(new JsonQuery(".\"string\"", data), [
-                "some string"
-            ]);
-        });
+            it("quoted-string", function() {
+                assert.deepEqual(new JsonQuery(".\"string\"", data), [
+                    "some string"
+                ]);
+            });
 
-        it("string", function() {
-            assert.deepEqual(new JsonQuery(".string", data), [
-                "some string"
-            ]);
+            it("string", function() {
+                assert.deepEqual(new JsonQuery(".string", data), [
+                    "some string"
+                ]);
+            });
         });
     });
 });

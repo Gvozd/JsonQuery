@@ -3,7 +3,7 @@
 
 module.exports = function (config) {
     config.set({
-
+        //requirejs: require('./lib/requirejs.conf'),
         // base path, that will be used to resolve files and exclude
         basePath: '',
 
@@ -14,14 +14,17 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            "./dist/JsonQuery.js",
+//            "./dist/JsonQuery.js",
 //            "./tests/init.js",
 //            "./tests/level_1.js",
 //            "./tests/level_2.js",
 //            "./tests/level_3.js"
+            {pattern: 'lib/*.js', included: false},
+            {pattern: 'lib/**/*.js', included: false},
             {pattern: 'lib2/**/*.js', included: false},
-            {pattern: 'tests/*Spec.js', included: false},
-            'tests/main.js'
+            'tests/main.js',
+            {pattern: 'tests/*.js', included: false}
+
         ],
 
 

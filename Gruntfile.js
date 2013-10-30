@@ -20,13 +20,13 @@ module.exports = function (grunt) {
                 src: [
                     'lib/intro.js',
                     'lib/grammar.js',
-                    'lib/filtering.js',
+                    'lib/findByFilter.js',
                     'lib/filters/*.js',
                     'lib/union/*.js',
                     'lib/combinator/*.js',
                     'lib/pseudo/*.js',
                     'lib/utility/*.js',
-                    'lib/exports.js',
+                    'lib/JsonQuery.js',
                     'lib/outro.js'
                 ],
                 dest: 'dist/<%= pkg.name %>.js'
@@ -67,14 +67,14 @@ module.exports = function (grunt) {
                     'lib/combinator/*.js',
                     'lib/pseudo/*.js',
                     'lib/utility/*.js',
-                    'lib/exports.js',
-                    'lib/filtering.js'
+                    'lib/JsonQuery.js',
+                    'lib/findByFilter.js'
                 ]
             }
         },
         nodeunit: {
             files: [
-                'tests/options.js'
+                'tests/options._js'
             ]
         },
         watch: {
