@@ -15,48 +15,50 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 /*global xdescribe, it, assert*/
-describe('level_2', function () {
+define(['JsonQuery'], function(JsonQuery) {
     'use strict';
-    xdescribe('sibling', function () {
-        var data = {
-            "a": 1,
-            "b": 2,
-            "c": {
-                "a": 3,
-                "b": 4,
+    describe('level_2', function () {
+        xdescribe('sibling', function () {
+            var data = {
+                "a": 1,
+                "b": 2,
                 "c": {
-                    "a": 5,
-                    "b": 6
+                    "a": 3,
+                    "b": 4,
+                    "c": {
+                        "a": 5,
+                        "b": 6
+                    }
+                },
+                "d": {
+                    "a": 7
+                },
+                "e": {
+                    "b": 8
                 }
-            },
-            "d": {
-                "a": 7
-            },
-            "e": {
-                "b": 8
-            }
-        };
+            };
 
-        it("sibling_childof", function () {
-            assert.deepEqual(new JsonQuery(":root > .a ~ .b", data), [
-                2
-            ]);
-        });
+            it("sibling_childof", function () {
+                assert.deepEqual(new JsonQuery(":root > .a ~ .b", data), [
+                    2
+                ]);
+            });
 
-        it("sibling_descendantof", function () {
-            assert.deepEqual(new JsonQuery(":root .a ~ .b", data), [
-                2,
-                4,
-                6
-            ]);
-        });
+            it("sibling_descendantof", function () {
+                assert.deepEqual(new JsonQuery(":root .a ~ .b", data), [
+                    2,
+                    4,
+                    6
+                ]);
+            });
 
-        it("sibling_unrooted", function () {
-            assert.deepEqual(new JsonQuery(".a ~ .b", data), [
-                2,
-                4,
-                6
-            ]);
+            it("sibling_unrooted", function () {
+                assert.deepEqual(new JsonQuery(".a ~ .b", data), [
+                    2,
+                    4,
+                    6
+                ]);
+            });
         });
     });
 });

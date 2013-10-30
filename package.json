@@ -37,7 +37,6 @@
     "grunt-contrib-watch": "~0.5.3",
     "karma-chai": "0.0.2",
     "grunt-karma": "~0.6.2",
-    "karma": "~0.10.4",
-    "amdefine": "~0.1.0"
+    "karma": "~0.10.4"
   }
 }

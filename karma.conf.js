@@ -3,7 +3,7 @@
 
 module.exports = function (config) {
     config.set({
-        //requirejs: require('./lib/requirejs.conf'),
+
         // base path, that will be used to resolve files and exclude
         basePath: '',
 
