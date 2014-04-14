@@ -4,22 +4,44 @@
     <meta charset="utf-8">
     <title>Test Playground</title>
     <script src="data.js"></script>
-    <script src="../dist/JsonQuery.js"></script>
+    <script src="lib.js"></script>
     <script>
-        var filter, selector;
-        console.log(data);
-        test('number');
-        test('.prop3');
-        test('object.prop3');
-        test('number.prop3');
-        test('.prop1');
-        test('.prop1,.prop3');
-        test('.prop3, .prop3');
+        var result,
+            normalizedResult;
 
-        function test(selector) {
-            console.log(JsonQuery(selector, data));
+        result = findByChecker([{object:data, property: ''}], getAllNumber);
+        normalizedResult = normalize(result);
+        console.log('number', normalizedResult);
+
+        result = findByChecker([{object:data, property: ''}], getAllProp1);
+        normalizedResult = normalize(result);
+        console.log('.prop`', normalizedResult);
+
+        result = findByChecker([{object:data, property: ''}], function unionNumberAndProp1(stack, callback) {
+            _getIntersect
+            return unionNumberAndProp1;
+        });
+        normalizedResult = normalize(result);
+        console.log('number.prop1', normalizedResult);
+
+
+
+        function getAllNumber(stack, callback) {
+            var object = stack[stack.length - 1].object;
+            if('number' === typeof object) {
+                callback([stack]);
+            }
+            return getAllNumber;
         }
 
+        function getAllProp1(stack, callback) {
+            var property = stack[stack.length - 1].property;
+            debugger;
+            if('prop1' === property) {
+                callback([stack]);
+            }
+            return getAllProp1;
+        }
     </script>
 </head>
 <body>
