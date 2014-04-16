@@ -14,7 +14,7 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-/*global xdescribe, it, assert*/
+/*global xdescribe, xit, assert*/
 define(['JsonQuery'], function(JsonQuery) {
     'use strict';
     describe('level_2', function () {
@@ -38,13 +38,13 @@ define(['JsonQuery'], function(JsonQuery) {
                 }
             };
 
-            it("sibling_childof", function () {
+            xit("sibling_childof", function () {
                 assert.deepEqual(new JsonQuery(":root > .a ~ .b", data), [
                     2
                 ]);
             });
 
-            it("sibling_descendantof", function () {
+            xit("sibling_descendantof", function () {
                 assert.deepEqual(new JsonQuery(":root .a ~ .b", data), [
                     2,
                     4,
@@ -52,7 +52,7 @@ define(['JsonQuery'], function(JsonQuery) {
                 ]);
             });
 
-            it("sibling_unrooted", function () {
+            xit("sibling_unrooted", function () {
                 assert.deepEqual(new JsonQuery(".a ~ .b", data), [
                     2,
                     4,
