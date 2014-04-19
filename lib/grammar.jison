@@ -1,12 +1,11 @@
 %{
-var createGreaterCombinator, createSpaceCombinator, createFilterAny, createFilterDeeperAny, createFilterName,
+var createGreaterCombinator, createSpaceCombinator, createFilterAny, createFilterName,
     notImplemented, createFilterType, createFilterFirstChild, createFilterLastChild, createFilterNthChild,
     createFilterNthLastChild, createFilterRoot, getFunctionalPseudoFilter, getPseudoFilter, createUnionAnd, createUnionOr;
 define(function(require, exports, module) {
     createGreaterCombinator = require('combinator/createGreaterCombinator');
     createSpaceCombinator = require('combinator/createSpaceCombinator');
     createFilterAny = require('filters/createFilterAny');
-    createFilterDeeperAny = require('filters/createFilterName');
     createFilterName = require('filters/createFilterName');
     notImplemented = require('filters/notImplemented');
     createFilterType = require('filters/createFilterType');

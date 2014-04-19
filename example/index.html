@@ -9,7 +9,9 @@
     <script>
         var stacks = getAllStacks(data);
 
-        var prop1 = stacks.filter(createFilterByName('prop3'));
+        var prop1 = stacks.filter(createFilterByName('prop3').filter(function(el, i, arr) {
+            return arr.indexOf(el) === i;
+        }));
         console.log(prop1.map(getValue));
 
         var number = stacks.filter(createFilterByType('number'));
@@ -35,85 +37,17 @@
 
 
 
-        /**
-         * @typedef {function} stackFilter
-         * @param {Stack} stack
-         * @returns {Boolean}
-         */
 
-        /**
-         * @returns {stackFilter}
-         */
-        function createFilterByName(name) {
-            /**
-             * @type {stackFilter}
-             */
-            function filterByName(stack) {
-                return name === stack[stack.length - 1].property;
-            }
-            return filterByName;
-        }
 
-        /**
-         * @returns {stackFilter}
-         */
-        function createFilterByType(type) {
-            /**
-             * @type {stackFilter}
-             */
-            function filterByType(stack) {
-                return type === typeof stack[stack.length - 1].value;
-            }
-            return filterByType;
-        }
 
-        /**
-         * @parma {stackFilter} filter1
-         * @parma {stackFilter} filter2
-         * @returns {stackFilter}
-         */
-        function createUnionAnd(filter1, filter2) {
-            /**
-             * @type {stackFilter}
-             */
-            function unionAnd(stack) {
-                return filter1(stack) && filter2(stack);
-            }
-            return unionAnd;
-        }
 
-        /**
-         * @parma {stackFilter} filter1
-         * @parma {stackFilter} filter2
-         * @returns {stackFilter}
-         */
-        function createUnionOr(filter1, filter2) {
-            /**
-             * @type {stackFilter}
-             */
-            function unionOr(stack) {
-                return filter1(stack) || filter2(stack);
-            }
-            return unionOr;
-        }
 
-        /**
-         * @parma {stackFilter} filter1
-         * @parma {stackFilter} filter2
-         * @returns {stackFilter}
-         */
-        function createGreatorCombinator2(filter1, filter2) {
-            /**
-             * @type {stackFilter}
-             */
-            function greaterCombinator2(stack) {
-                if(stack.length < 2) {
-                    return false;
-                }
-                return filter1(stack[stack.length - 2].stack) && filter2(stack);
-            }
-            return greaterCombinator2;
-        }
+
+
+
+
+
+
 
         /**
          * @param {Stack} stack
