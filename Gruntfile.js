@@ -1,4 +1,5 @@
 /*global module:false*/
+var path = require('path');
 module.exports = function (grunt) {
     'use strict';
     // Project configuration.
@@ -89,7 +90,8 @@ module.exports = function (grunt) {
         },
         exec: {
             jison: {
-                cmd: 'cd lib && jison grammar.jison'
+                cmd: path.join('..', 'node_modules', '.bin', 'jison') + ' grammar.jison',
+                cwd: 'lib'
             }
         },
         clean: [
