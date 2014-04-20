@@ -77,6 +77,18 @@ V         v|\\0{0,4}("58"|"78")(\r\n|[ \t\r\n\f])?|\\v
 \/\*[^*]*\*+([^/*][^*]*\*+)*\/                    /* ignore comments */
 
 .                return yytext;
+//???
+<<EOF>>               return 'EOF'
+
+/lex
+%start full_selector
+%ebnf /* enable EBNF grammar syntax */
+%% /* language grammar */
+
+full_selector
+  : selectors_group EOF
+    {return $1;}
+  ;
 
 selectors_group
 //  : selector [ COMMA S* selector ]*
@@ -119,8 +131,8 @@ simple_selector_sequence
 //  : [ type_selector | universal ]
 //    [ HASH | class | attrib | pseudo | negation ]*
 //  | [ HASH | class | attrib | pseudo | negation ]+
-  : simple_selector_sequence_1 simple_selector_sequence_2*
-    {$$ = createUnionAnd($1, $2);}
+  : simple_selector_sequence_1
+    {$$ = $1;}
   | simple_selector_sequence_2
     {$$ = $1;}
   | simple_selector_sequence simple_selector_sequence_2
@@ -216,7 +228,7 @@ functional_pseudo
 //  : FUNCTION S* expression ')'
   : FUNCTION S expression ')'
     {$$ = getFunctionalPseudoFilter($1, $3);}
-  : FUNCTION expression ')'
+  | FUNCTION expression ')'
     {$$ = getFunctionalPseudoFilter($1, $2);}
   ;
 
@@ -228,7 +240,7 @@ expression
     {$$ = $1;}
   | expression_1
     {$$ = $1;}
-  : expression expression_1 S
+  | expression expression_1 S
     {$$ = $1 + $2;}
   | expression expression_1
     {$$ = $1 + $2;}
@@ -245,7 +257,7 @@ negation
     {$$ = notImplemented(arguments);}
   | NOT negation_arg S ')'
     {$$ = notImplemented(arguments);}
-  | NOT S negation_arg S ')'
+  | NOT negation_arg ')'
     {$$ = notImplemented(arguments);}
   ;
 
