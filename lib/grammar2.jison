@@ -142,7 +142,7 @@ simple_selector_sequence_1
   : type_selector | universal
   ;
 simple_selector_sequence_2
-  : HASH | class | attrib | pseudo | negation | has
+  : HASH | class | attrib | pseudo | negation
   ;
 
 type_selector
@@ -251,16 +251,18 @@ expression_1
 
 negation
 //  : NOT S* negation_arg S* ')'
-  : NOT S negation_arg S ')'
-    {$$ = notImplemented(arguments);}
-  | NOT S negation_arg ')'
-    {$$ = notImplemented(arguments);}
-  | NOT negation_arg S ')'
-    {$$ = notImplemented(arguments);}
-  | NOT negation_arg ')'
+  : NOT negation_arg ')'
     {$$ = notImplemented(arguments);}
   ;
 
 negation_arg
-  : type_selector | universal | HASH | class | attrib | pseudo
+//  : type_selector | universal | HASH | class | attrib | pseudo
+  : S selector S
+    {$$ = $2;}
+  | S selector
+    {$$ = $2;}
+  | selector S
+    {$$ = $1;}
+  | selector
+    {$$ = $1;}
   ;
