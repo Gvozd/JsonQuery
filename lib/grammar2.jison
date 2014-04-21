@@ -51,6 +51,7 @@ V         v|\\0{0,4}("58"|"78")(\r\n|[ \t\r\n\f])?|\\v
 %%
 
 [ \t\r\n\f]+     return 'S';
+TEST     return 'TEST';
 
 "~="             return 'INCLUDES';
 "|="             return 'DASHMATCH';
@@ -97,7 +98,7 @@ selectors_group
   | selectors_group COMMA S selector
     {$$ = createUnion($1, $4);}
   | selectors_group COMMA selector
-    {$$ = createUnion($1, $4);}
+    {$$ = createUnion($1, $3);}
   ;
 
 selector
@@ -111,17 +112,17 @@ selector
 combinator
   /* combinators can be surrounded by whitespace */
 //  : PLUS S* | GREATER S* | TILDE S* | S+
-  : PLUS
+  : PLUS S
     {$$ = notImplemented(arguments);}
-  | PLUS S
+  | PLUS
     {$$ = notImplemented(arguments);}
-  | GREATER
-    {$$ = createGreaterCombinator;}
   | GREATER S
     {$$ = createGreaterCombinator;}
-  | TILDE
-    {$$ = notImplemented(arguments);}
+  | GREATER
+    {$$ = createGreaterCombinator;}
   | TILDE S
+    {$$ = notImplemented(arguments);}
+  | TILDE
     {$$ = notImplemented(arguments);}
   | S
     {$$ = createSpaceCombinator;}
