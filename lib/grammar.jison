@@ -51,10 +51,10 @@ S         s|\\0{0,4}("53"|"73")(\r\n|[ \t\r\n\f])?|\\s
 V         v|\\0{0,4}("58"|"78")(\r\n|[ \t\r\n\f])?|\\v
 
 %options case-insensitive
+
 %%
 
 [ \t\r\n\f]+     return 'S';
-TEST     return 'TEST';
 
 "~="             return 'INCLUDES';
 "|="             return 'DASHMATCH';
@@ -86,6 +86,7 @@ TEST     return 'TEST';
 <<EOF>>               return 'EOF'
 
 /lex
+
 %start full_selector
 %ebnf /* enable EBNF grammar syntax */
 %% /* language grammar */
@@ -102,13 +103,13 @@ selectors_group
   | selector
     {$$ = $1;}
   | selectors_group COMMA S selector S
-    {$$ = createUnion($1, $4);}
+    {$$ = createUnionOr($1, $4);}
   | selectors_group COMMA selector S
-    {$$ = createUnion($1, $3);}
+    {$$ = createUnionOr($1, $3);}
   | selectors_group COMMA S selector
-    {$$ = createUnion($1, $4);}
+    {$$ = createUnionOr($1, $4);}
   | selectors_group COMMA selector
-    {$$ = createUnion($1, $3);}
+    {$$ = createUnionOr($1, $3);}
   ;
 
 selector
@@ -225,22 +226,22 @@ pseudo
   /* Note that pseudo-elements are restricted to one per selector and */
   /* occur only in the last simple_selector_sequence. */
 //  : ':' ':'? [ IDENT | functional_pseudo ]
-  : ':' IDENT
-    {$$ = getPseudoFilter($2);}
-  | ':' ':' IDENT
-    {$$ = getPseudoFilter($3);}
-  | ':' functional_pseudo
+  : ':' functional_pseudo
     {$$ = $2;}
   | ':' ':' functional_pseudo
     {$$ = $3;}
+  | ':' IDENT
+    {$$ = getPseudoFilter($2);}
+  | ':' ':' IDENT
+    {$$ = getPseudoFilter($3);}
   ;
 
 functional_pseudo
 //  : FUNCTION S* expression ')'
-  : FUNCTION S expression ')'
+  : IDENT '(' S expression ')'
+    {$$ = getFunctionalPseudoFilter($1, $4);}
+  | IDENT '('  expression ')'
     {$$ = getFunctionalPseudoFilter($1, $3);}
-  | FUNCTION expression ')'
-    {$$ = getFunctionalPseudoFilter($1, $2);}
   ;
 
 expression
