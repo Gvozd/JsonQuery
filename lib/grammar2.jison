@@ -82,19 +82,20 @@ TEST     return 'TEST';
 <<EOF>>               return 'EOF'
 
 /lex
-//%left 'combinator' 'S'
-//%left 'COMMA' 'S'
-
-%start selectors_group
+%start full_selector
 %ebnf /* enable EBNF grammar syntax */
 %% /* language grammar */
 
+full_selector
+  : selectors_group EOF
+    {return $1;}
+  ;
 
 selectors_group
 //  : selector [ COMMA S* selector ]*
-  : selector
-    {$$ = $1;}
-  | selector S
+  : S selector
+    {$$ = $2;}
+  | selector
     {$$ = $1;}
   | selectors_group COMMA S selector S
     {$$ = createUnion($1, $4);}
@@ -108,19 +109,152 @@ selectors_group
 
 selector
 //  : simple_selector_sequence [ combinator simple_selector_sequence ]*
-  : negation
+  : simple_selector_sequence
     {$$ = $1;}
-  | selector combinator negation
+  | selector combinator simple_selector_sequence
     {$$ = $2($1, $3);}
   ;
 
 combinator
   /* combinators can be surrounded by whitespace */
 //  : PLUS S* | GREATER S* | TILDE S* | S+
-  : S
+  : PLUS S
+    {$$ = notImplemented(arguments);}
+  | PLUS
+    {$$ = notImplemented(arguments);}
+  | GREATER S
+    {$$ = createGreaterCombinator;}
+  | GREATER
+    {$$ = createGreaterCombinator;}
+  | TILDE S
+    {$$ = notImplemented(arguments);}
+  | TILDE
+    {$$ = notImplemented(arguments);}
+  | S
     {$$ = createSpaceCombinator;}
   ;
 
+simple_selector_sequence
+//  : [ type_selector | universal ]
+//    [ HASH | class | attrib | pseudo | negation ]*
+//  | [ HASH | class | attrib | pseudo | negation ]+
+  : simple_selector_sequence_1
+    {$$ = $1;}
+  | simple_selector_sequence_2
+    {$$ = $1;}
+  | simple_selector_sequence simple_selector_sequence_2
+    {$$ = createUnionAnd($1, $2);}
+  ;
+simple_selector_sequence_1
+  : type_selector | universal
+  ;
+simple_selector_sequence_2
+  : HASH | class | attrib | pseudo | negation
+  ;
+
+type_selector
+//  : [ namespace_prefix ]? element_name
+  : namespace_prefix element_name
+    {$$ = notImplemented(arguments);}
+  | element_name
+    {$$ = createFilterType($1);}
+  ;
+
+namespace_prefix
+//  : [ IDENT | '*' ]? '|'
+  : IDENT '|'
+    {$$ = notImplemented(arguments);}
+  | '*' '|'
+    {$$ = notImplemented(arguments);}
+  | '|'
+    {$$ = notImplemented(arguments);}
+  ;
+
+element_name
+  : IDENT
+    {$$ = $1;}
+  ;
+
+universal
+//  : [ namespace_prefix ]? '*'
+  : namespace_prefix '*'
+    {$$ = notImplemented(arguments);}
+  | '*'
+    {$$ = createFilterAny();}
+  ;
+
+class
+//  : '.' IDENT
+  : '.' IDENT
+    {$$ = createFilterName($2);}
+  | '.' STRING
+    {$$ = createFilterName(eval($2));}
+  ;
+
+attrib
+//  : '[' S* [ namespace_prefix ]? IDENT S*
+//        [ [ PREFIXMATCH |
+//            SUFFIXMATCH |
+//            SUBSTRINGMATCH |
+//            '=' |
+//            INCLUDES |
+//            DASHMATCH ] S* [ IDENT | STRING ] S*
+//        ]? ']'
+  : '[' IDENT ']'
+    {$$ = notImplemented(arguments);}
+  ;
+
+attrib2
+  : '[' 'S*' namespace_prefix IDENT 'S*' ( PREFIXMATCH | SUFFIXMATCH | SUBSTRINGMATCH | '=' | INCLUDES | DASHMATCH ) 'S*' ( IDENT | STRING ) 'S*' ']'
+    {$$ = notImplemented(arguments);}
+  | '[' 'S*' namespace_prefix IDENT 'S*' ']'
+    {$$ = notImplemented(arguments);}
+  | '[' 'S*' IDENT 'S*' ( PREFIXMATCH | SUFFIXMATCH | SUBSTRINGMATCH | '=' | INCLUDES | DASHMATCH ) 'S*' ( IDENT | STRING ) 'S*' ']'
+    {$$ = notImplemented(arguments);}
+  | '[' 'S*' IDENT 'S*'  ']'
+    {$$ = notImplemented(arguments);}
+  ;
+
+pseudo
+  /* '::' starts a pseudo-element, ':' a pseudo-class */
+  /* Exceptions: :first-line, :first-letter, :before and :after. */
+  /* Note that pseudo-elements are restricted to one per selector and */
+  /* occur only in the last simple_selector_sequence. */
+//  : ':' ':'? [ IDENT | functional_pseudo ]
+  : ':' IDENT
+    {$$ = getPseudoFilter($2);}
+  | ':' ':' IDENT
+    {$$ = getPseudoFilter($3);}
+  | ':' functional_pseudo
+    {$$ = $2;}
+  | ':' ':' functional_pseudo
+    {$$ = $3;}
+  ;
+
+functional_pseudo
+//  : FUNCTION S* expression ')'
+  : FUNCTION S expression ')'
+    {$$ = getFunctionalPseudoFilter($1, $3);}
+  | FUNCTION expression ')'
+    {$$ = getFunctionalPseudoFilter($1, $2);}
+  ;
+
+expression
+  /* In CSS3, the expressions are identifiers, strings, */
+  /* or of the form "an+b" */
+//  : [ expression_1 S* ]+
+  : expression_1 S
+    {$$ = $1;}
+  | expression_1
+    {$$ = $1;}
+  | expression expression_1 S
+    {$$ = $1 + $2;}
+  | expression expression_1
+    {$$ = $1 + $2;}
+  ;
+expression_1
+  : PLUS | '-' | DIMENSION | NUMBER | STRING | IDENT
+  ;
 
 negation
 //  : NOT S* negation_arg S* ')'
@@ -130,8 +264,5 @@ negation
 
 negation_arg
 //  : type_selector | universal | HASH | class | attrib | pseudo
-  : S selectors_group
-    {$$ = $2;}
-  | selectors_group
-    {$$ = $1;}
+  : selectors_group
   ;
