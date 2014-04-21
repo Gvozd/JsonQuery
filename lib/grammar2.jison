@@ -45,6 +45,9 @@ E         e|\\0{0,4}("45"|"65")(\r\n|[ \t\r\n\f])?
 N         n|\\0{0,4}("4e"|"6e")(\r\n|[ \t\r\n\f])?|\\n
 O         o|\\0{0,4}("4f"|"6f")(\r\n|[ \t\r\n\f])?|\\o
 T         t|\\0{0,4}("54"|"74")(\r\n|[ \t\r\n\f])?|\\t
+H         h|\\0{0,4}("48"|"68")(\r\n|[ \t\r\n\f])?|\\h
+A         a|\\0{0,4}("41"|"61")(\r\n|[ \t\r\n\f])?|\\a
+S         s|\\0{0,4}("53"|"73")(\r\n|[ \t\r\n\f])?|\\s
 V         v|\\0{0,4}("58"|"78")(\r\n|[ \t\r\n\f])?|\\v
 
 %options case-insensitive
@@ -68,6 +71,7 @@ TEST     return 'TEST';
 {w}","           return 'COMMA';
 {w}"~"           return 'TILDE';
 ":"{N}{O}{T}"("  return 'NOT';
+":"{H}{A}{S}"("  return 'HAS';
 @{ident}         return 'ATKEYWORD';
 {invalid}        return 'INVALID';
 {num}%           return 'PERCENTAGE';
@@ -149,7 +153,7 @@ simple_selector_sequence_1
   : type_selector | universal
   ;
 simple_selector_sequence_2
-  : HASH | class | attrib | pseudo | negation
+  : HASH | class | attrib | pseudo | negation | has_inner
   ;
 
 type_selector
@@ -265,4 +269,10 @@ negation
 negation_arg
 //  : type_selector | universal | HASH | class | attrib | pseudo
   : selectors_group
+  ;
+
+has_inner
+//  : NOT S* negation_arg S* ')'
+  : HAS selectors_group ')'
+    {$$ = notImplemented(arguments);}
   ;
