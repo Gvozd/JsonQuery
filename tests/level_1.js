@@ -326,6 +326,23 @@ define(['JsonQuery'], function(JsonQuery) {
                     }
                 ]);
             });
+
+            it("child of root_pseudo #1", function () {
+                assert.deepEqual(new JsonQuery(":root>object", data), [
+                    {
+                        "first": "Lloyd",
+                        "last": "Hilaiel"
+                    }
+                ]);
+            });
+            it("child of root_pseudo #2", function () {
+                assert.deepEqual(new JsonQuery(":root > object", data), [
+                    {
+                        "first": "Lloyd",
+                        "last": "Hilaiel"
+                    }
+                ]);
+            });
         });
 
         describe('collision', function () {
