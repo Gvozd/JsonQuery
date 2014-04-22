@@ -1,6 +1,6 @@
 %{
 var createGreaterCombinator, createSpaceCombinator, createFilterAny, createFilterName,
-    notImplemented, createFilterType, createFilterFirstChild, createFilterLastChild, createFilterNthChild,
+    notImplemented, createFilterType, createFilterHas, createFilterFirstChild, createFilterLastChild, createFilterNthChild,
     createFilterNthLastChild, createFilterRoot, getFunctionalPseudoFilter, getPseudoFilter, createUnionAnd, createUnionOr;
 define(function(require, exports, module) {
     createGreaterCombinator = require('combinator/createGreaterCombinator');
@@ -40,15 +40,15 @@ invalid1  \"([^\n\r\f\\"]|\\{nl}|{nonascii}|{escape})*
 invalid2  \'([^\n\r\f\\']|\\{nl}|{nonascii}|{escape})*
 nl        \n|\r\n|\r|\f
 w         [ \t\r\n\f]*
-D         d|\\0{0,4}("44"|"64")(\r\n|[ \t\r\n\f])?
-E         e|\\0{0,4}("45"|"65")(\r\n|[ \t\r\n\f])?
-N         n|\\0{0,4}("4e"|"6e")(\r\n|[ \t\r\n\f])?|\\n
-O         o|\\0{0,4}("4f"|"6f")(\r\n|[ \t\r\n\f])?|\\o
-T         t|\\0{0,4}("54"|"74")(\r\n|[ \t\r\n\f])?|\\t
-H         h|\\0{0,4}("48"|"68")(\r\n|[ \t\r\n\f])?|\\h
-A         a|\\0{0,4}("41"|"61")(\r\n|[ \t\r\n\f])?|\\a
-S         s|\\0{0,4}("53"|"73")(\r\n|[ \t\r\n\f])?|\\s
-V         v|\\0{0,4}("58"|"78")(\r\n|[ \t\r\n\f])?|\\v
+D         "d"|\\"0"{0,4}("44"|"64")(\r\n|[ \t\r\n\f])?
+E         "e"|\\"0"{0,4}("45"|"65")(\r\n|[ \t\r\n\f])?
+N         "n"|\\"0"{0,4}("4e"|"6e")(\r\n|[ \t\r\n\f])?|\\"n"
+O         "o"|\\"0"{0,4}("4f"|"6f")(\r\n|[ \t\r\n\f])?|\\"o"
+T         "t"|\\"0"{0,4}("54"|"74")(\r\n|[ \t\r\n\f])?|\\"t"
+H         "h"|\\"0"{0,4}("48"|"68")(\r\n|[ \t\r\n\f])?|\\"h"
+A         "a"|\\"0"{0,4}("41"|"61")(\r\n|[ \t\r\n\f])?|\\"a"
+S         "s"|\\"0"{0,4}("53"|"73")(\r\n|[ \t\r\n\f])?|\\"s"
+V         "v"|\\"0"{0,4}("58"|"78")(\r\n|[ \t\r\n\f])?|\\"v"
 
 %options case-insensitive
 
@@ -124,17 +124,17 @@ combinator
   /* combinators can be surrounded by whitespace */
 //  : PLUS S* | GREATER S* | TILDE S* | S+
   : PLUS S
-    {$$ = notImplemented(arguments);}
+    {/*1*/;$$ = notImplemented(arguments);}
   | PLUS
-    {$$ = notImplemented(arguments);}
+    {/*2*/;$$ = notImplemented(arguments);}
   | GREATER S
     {$$ = createGreaterCombinator;}
   | GREATER
     {$$ = createGreaterCombinator;}
   | TILDE S
-    {$$ = notImplemented(arguments);}
+    {/*3*/;$$ = notImplemented(arguments);}
   | TILDE
-    {$$ = notImplemented(arguments);}
+    {/*4*/;$$ = notImplemented(arguments);}
   | S
     {$$ = createSpaceCombinator;}
   ;
@@ -160,7 +160,7 @@ simple_selector_sequence_2
 type_selector
 //  : [ namespace_prefix ]? element_name
   : namespace_prefix element_name
-    {$$ = notImplemented(arguments);}
+    {/*5*/;$$ = notImplemented(arguments);}
   | element_name
     {$$ = createFilterType($1);}
   ;
@@ -168,11 +168,11 @@ type_selector
 namespace_prefix
 //  : [ IDENT | '*' ]? '|'
   : IDENT '|'
-    {$$ = notImplemented(arguments);}
+    {/*6*/;$$ = notImplemented(arguments);}
   | '*' '|'
-    {$$ = notImplemented(arguments);}
+    {/*7*/;$$ = notImplemented(arguments);}
   | '|'
-    {$$ = notImplemented(arguments);}
+    {/*8*/;$$ = notImplemented(arguments);}
   ;
 
 element_name
@@ -183,7 +183,7 @@ element_name
 universal
 //  : [ namespace_prefix ]? '*'
   : namespace_prefix '*'
-    {$$ = notImplemented(arguments);}
+    {/*9*/;$$ = notImplemented(arguments);}
   | '*'
     {$$ = createFilterAny();}
   ;
@@ -206,18 +206,18 @@ attrib
 //            DASHMATCH ] S* [ IDENT | STRING ] S*
 //        ]? ']'
   : '[' IDENT ']'
-    {$$ = notImplemented(arguments);}
+    {/*10*/;$$ = notImplemented(arguments);}
   ;
 
 attrib2
   : '[' 'S*' namespace_prefix IDENT 'S*' ( PREFIXMATCH | SUFFIXMATCH | SUBSTRINGMATCH | '=' | INCLUDES | DASHMATCH ) 'S*' ( IDENT | STRING ) 'S*' ']'
-    {$$ = notImplemented(arguments);}
+    {/*11*/;$$ = notImplemented(arguments);}
   | '[' 'S*' namespace_prefix IDENT 'S*' ']'
-    {$$ = notImplemented(arguments);}
+    {/*12*/;$$ = notImplemented(arguments);}
   | '[' 'S*' IDENT 'S*' ( PREFIXMATCH | SUFFIXMATCH | SUBSTRINGMATCH | '=' | INCLUDES | DASHMATCH ) 'S*' ( IDENT | STRING ) 'S*' ']'
-    {$$ = notImplemented(arguments);}
+    {/*13*/;$$ = notImplemented(arguments);}
   | '[' 'S*' IDENT 'S*'  ']'
-    {$$ = notImplemented(arguments);}
+    {/*14*/;$$ = notImplemented(arguments);}
   ;
 
 pseudo
@@ -264,7 +264,7 @@ expression_1
 negation
 //  : NOT S* negation_arg S* ')'
   : NOT negation_arg ')'
-    {$$ = notImplemented(arguments);}
+    {/*15*/;$$ = notImplemented(arguments);}
   ;
 
 negation_arg
@@ -275,5 +275,5 @@ negation_arg
 has_inner
 //  : NOT S* negation_arg S* ')'
   : HAS selectors_group ')'
-    {$$ = notImplemented(arguments);}
+    {debugger;$$ = createFilterHas($2);}
   ;
