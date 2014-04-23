@@ -70,8 +70,8 @@ V         "v"|\\"0"{0,4}("58"|"78")(\r\n|[ \t\r\n\f])?|\\"v"
 {w}">"           return 'GREATER';
 {w}","           return 'COMMA';
 {w}"~"           return 'TILDE';
-":"{N}{O}{T}"("  return 'NOT';
-":"{H}{A}{S}"("  return 'HAS';
+":"{N}{O}{T}[ \t\r\n\f]*"("  return 'NOT';
+":"{H}{A}{S}[ \t\r\n\f]*"("  return 'HAS';
 @{ident}         return 'ATKEYWORD';
 {invalid}        return 'INVALID';
 {num}%           return 'PERCENTAGE';
@@ -98,7 +98,11 @@ full_selector
 
 selectors_group
 //  : selector [ COMMA S* selector ]*
-  : S selector
+  : S selector S
+    {$$ = $2;}
+  | selector S
+    {$$ = $2;}
+  | S selector
     {$$ = $2;}
   | selector
     {$$ = $1;}

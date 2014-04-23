@@ -14,7 +14,7 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-/*global define, describe, it, assert*/
+/*global define, describe, xdescribe, it, assert*/
 define(['JsonQuery'], function(JsonQuery) {
     'use strict';
     describe('level_3', function () {
@@ -145,7 +145,7 @@ define(['JsonQuery'], function(JsonQuery) {
                 ]);
             });
         });
-        describe('expr', function () {
+        xdescribe('expr', function () {
             var data = {
                 "int": 42,
                 "float": 3.1415,
