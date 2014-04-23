@@ -127,6 +127,10 @@ combinator
     {/*1*/;$$ = notImplemented(arguments);}
   | PLUS
     {/*2*/;$$ = notImplemented(arguments);}
+  | S GREATER S
+    {$$ = createGreaterCombinator;}
+  | S GREATER
+    {$$ = createGreaterCombinator;}
   | GREATER S
     {$$ = createGreaterCombinator;}
   | GREATER
@@ -275,5 +279,5 @@ negation_arg
 has_inner
 //  : NOT S* negation_arg S* ')'
   : HAS selectors_group ')'
-    {debugger;$$ = createFilterHas($2);}
+    {$$ = createFilterHas($2);}
   ;
