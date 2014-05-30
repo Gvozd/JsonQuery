@@ -1,4 +1,4 @@
-
+/*global util*/
 (function () {
     'use strict';
 
@@ -55,5 +55,281 @@
         CDO = '<!--', // "<!--"           return CDO;
         CDC = '-->'; // "-->"            return CDC;
 
+    window.selectors_group = selectors_group;
 
+    function selectors_group(haystack, position) {
+        // selectors_group
+        //     : selector [ COMMA S* selector ]*
+        // ;
+        return util.sequence(
+            selector,
+            util.optional(
+                util.repeat(
+                    util.sequence(
+                        util.regexp(COMMA),
+                        util.optional(
+                            util.repeat(
+                                util.regexp(S)
+                            )
+                        ),
+                        selector
+                    )
+                )
+            )
+        )(haystack, position);
+    }
+
+    function selector(haystack, position) {
+        // selector
+        //     : simple_selector_sequence [ combinator simple_selector_sequence ]*
+        // ;
+        return util.sequence(
+            simple_selector_sequence,
+            util.optional(
+                util.repeat(
+                    util.sequence(
+                        combinator,
+                        simple_selector_sequence
+                    )
+                )
+            )
+        )(haystack, position);
+    }
+
+    function combinator(haystack, position) {
+        // combinator
+        //     /* combinators can be surrounded by whitespace */
+        //     : PLUS S* | GREATER S* | TILDE S* | S+
+        // ;
+        return util.any(
+            util.sequence(
+                util.regexp(PLUS),
+                util.optional(
+                    util.repeat(
+                        util.regexp(S)
+                    )
+                )
+            ),
+            util.sequence(
+                util.regexp(GREATER),
+                util.optional(
+                    util.repeat(
+                        util.regexp(S)
+                    )
+                )
+            ),
+            util.sequence(
+                util.regexp(TILDE),
+                util.optional(
+                    util.repeat(
+                        util.regexp(S)
+                    )
+                )
+            ),
+            util.repeat(
+                util.regexp(S)
+            )
+        )(haystack, position);
+    }
+
+    function simple_selector_sequence(haystack, position) {
+        // simple_selector_sequence
+        //     : [ type_selector | universal ]
+        //       [ HASH | class | attrib | pseudo | negation ]*
+        //     | [ HASH | class | attrib | pseudo | negation ]+
+        // ;
+        return util.any(
+            util.sequence(
+                util.any(
+                    type_selector,
+                    universal
+                ),
+                util.optional(
+                    util.repeat(
+                        util.any(
+                            util.regexp(HASH),
+                            class_selector,
+                            attrib,
+                            pseudo,
+                            negation
+                        )
+                    )
+                )
+            ),
+            util.repeat(
+                util.any(
+                    util.regexp(HASH),
+                    class_selector,
+                    attrib,
+                    pseudo,
+                    negation
+                )
+            )
+        )(haystack, position);
+    }
+
+    function type_selector(haystack, position) {
+        // type_selector
+        //     : [ namespace_prefix ]? element_name
+        // ;
+        return util.sequence(
+            util.optional(namespace_prefix),
+            element_name
+        )(haystack, position);
+    }
+
+    function namespace_prefix(haystack, position) {
+        // namespace_prefix
+        //     : [ IDENT | '*' ]? '|'
+        // ;
+        return util.sequence(
+            util.optional(
+                util.any(
+                    util.regexp(IDENT),
+                    util.text('*')
+                )
+            ),
+            util.text('|')
+        )(haystack, position);
+    }
+
+    function element_name(haystack, position) {
+        // element_name
+        //     : IDENT
+        // ;
+        return util.sequence(
+            util.regexp(IDENT)
+        )(haystack, position);
+    }
+
+    function universal(haystack, position) {
+        // universal
+        //     : [ namespace_prefix ]? '*'
+        // ;
+        return util.sequence(
+            util.optional(namespace_prefix),
+            util.text('*')
+        )(haystack, position);
+    }
+
+    function class_selector(haystack, position) {
+        // class
+        //     : '.' IDENT
+        // ;
+        return util.sequence(
+            util.text('.'),
+            util.regexp(IDENT)
+        )(haystack, position);
+    }
+
+    function attrib(haystack, position) {
+        // attrib
+        //     : '[' S* [ namespace_prefix ]? IDENT S*
+        //     [ [ PREFIXMATCH |
+        //         SUFFIXMATCH |
+        //         SUBSTRINGMATCH |
+        //         '=' |
+        //         INCLUDES |
+        //         DASHMATCH ] S* [ IDENT | STRING ] S*
+        //     ]? ']'
+        // ;
+        throw new Error('Not Implemented');
+    }
+
+    function pseudo(haystack, position) {
+        // pseudo
+        //     /* '::' starts a pseudo-element, ':' a pseudo-class */
+        //     /* Exceptions: :first-line, :first-letter, :before and :after. */
+        //     /* Note that pseudo-elements are restricted to one per selector and */
+        //     /* occur only in the last simple_selector_sequence. */
+        //     : ':' ':'? [ IDENT | functional_pseudo ]
+        // ;
+        return util.sequence(
+            util.text(':'),
+            util.opt(
+                util.text(':')
+            ),
+            util.any(
+                util.regexp(IDENT),
+                functional_pseudo
+            )
+        )(haystack, position);
+    }
+
+    function functional_pseudo(haystack, position) {
+        // functional_pseudo
+        //     : FUNCTION S* expression ')'
+        // ;
+        return util.sequence(
+            util.regexp(FUNCTION),
+            util.optional(
+                util.repeat(
+                    util.regexp(S)
+                )
+            ),
+            expression,
+            util.text(')')
+        )(haystack, position);
+    }
+
+
+    function expression(haystack, position) {
+        // expression
+        //     /* In CSS3, the expressions are identifiers, strings, */
+        //     /* or of the form "an+b" */
+        //     : [ [ PLUS | '-' | DIMENSION | NUMBER | STRING | IDENT ] S* ]+
+        // ;
+        return util.repeat(
+            util.sequence(
+                util.any(
+                    util.regexp(PLUS),
+                    util.text('-'),
+                    util.regexp(DIMENSION),
+                    util.regexp(NUMBER),
+                    util.regexp(STRING),
+                    util.regexp(IDENT)
+                ),
+                util.optional(
+                    util.repeat(
+                        util.regexp(S)
+                    )
+                )
+            )
+        )(haystack, position);
+    }
+
+    function negation(haystack, position) {
+        // negation
+        //     : NOT S* negation_arg S* ')'
+        // ;
+        return util.any(
+            util.regexp(NOT),
+            util.optional(
+                util.repeat(
+                    util.regexp(S)
+                )
+            ),
+            negation_arg,
+            util.optional(
+                util.repeat(
+                    util.regexp(S)
+                )
+            ),
+            util.text(')')
+        )(haystack, position);
+    }
+
+    function negation_arg(haystack, position) {
+        // negation_arg
+        //     : type_selector | universal | HASH | class | attrib | pseudo
+        // ;
+        return util.any(
+            type_selector,
+            universal,
+            util.regexp(HASH),
+            class_selector,
+            attrib,
+            pseudo
+        )(haystack, position);
+    }
 }());
