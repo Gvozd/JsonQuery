@@ -4,9 +4,7 @@ var util = (function () {
     var util = {};
 
     util.text = function text(needle) {
-        var result = exprText.bind(util, needle);
-        result.then = util.then.bind(util, result);
-        return result;
+        return exprText.bind(util, needle);
     };
 
     function exprText(needle, haystack, position) {
@@ -19,13 +17,10 @@ var util = (function () {
     }
 
     util.regexp = function (needle) {
-        var result;
         if ('string' === typeof needle) {
             needle = new RegExp('^(?:' + needle + ')');
         }
-        result = exprRegexp.bind(util, needle);
-        result.then = util.then.bind(util, result);
-        return result;
+        return exprRegexp.bind(util, needle);
     };
 
     function exprRegexp(needle, haystack, position) {
@@ -41,9 +36,7 @@ var util = (function () {
     }
 
     util.optional = function optional(pattern) {
-        var result = combinatorOptional.bind(util, pattern);
-        result.then = util.then.bind(util, result);
-        return result;
+        return combinatorOptional.bind(util, pattern);
     };
 
     function combinatorOptional(pattern, haystack, position) {
@@ -54,9 +47,7 @@ var util = (function () {
     }
 
     util.exclude = function exclude(pattern, except) {
-        var result = combinatorExclude.bind(util, pattern, except);
-        result.then = util.then.bind(util, result);
-        return result;
+        return combinatorExclude.bind(util, pattern, except);
     };
 
     function combinatorExclude(pattern, except, haystack, position) {
@@ -64,10 +55,8 @@ var util = (function () {
     }
 
     util.any = function any(firstPattern) {
-        var patterns = 'function' === typeof firstPattern ? arguments : firstPattern,
-            result = combinatorAny.bind(util, patterns);
-        result.then = util.then.bind(util, result);
-        return result;
+        var patterns = 'function' === typeof firstPattern ? arguments : firstPattern;
+        return combinatorAny.bind(util, patterns);
     };
 
     function combinatorAny(patterns, haystack, position) {
@@ -82,10 +71,8 @@ var util = (function () {
     }
 
     util.sequence = function sequence(firstPattern) {
-        var patterns = 'function' === typeof firstPattern ? arguments : firstPattern,
-            result = combinatorSequence.bind(util, patterns);
-        result.then = util.then.bind(util, result);
-        return result;
+        var patterns = 'function' === typeof firstPattern ? arguments : firstPattern;
+        return combinatorSequence.bind(util, patterns);
     };
 
     function combinatorSequence(patterns, haystack, position) {
@@ -113,10 +100,9 @@ var util = (function () {
     util.repeat = function repeat(pattern, separator) {
         var separated = !separator ?
                 pattern :
-                util.then(util.sequence(separator, pattern), getFirst),
-            result = combinatorRepeat.bind(util, pattern, separated);
-        result.then = util.then.bind(util, result);
-        return result;
+                util.then(util.sequence(separator, pattern), getFirst);
+
+        return combinatorRepeat.bind(util, pattern, separated);
     };
 
     function combinatorRepeat(pattern, separated, haystack, position) {
@@ -141,9 +127,7 @@ var util = (function () {
     }
 
     util.then = function then(pattern, transform) {
-        var result = combinatorThen.bind(util, pattern, transform);
-        result.then = util.then.bind(util, result);
-        return result;
+        return combinatorThen.bind(util, pattern, transform);
     };
 
     function combinatorThen(pattern, transform, haystack, position) {
