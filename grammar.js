@@ -40,7 +40,7 @@
         SUBSTRINGMATCH = '\\*=', // "*="             return SUBSTRINGMATCH;
         IDENT = '(?:' + ident + ')', // {ident}          return IDENT;
         STRING = '(?:' + string + ')', // {string}         return STRING;
-        FUNCTION = '(?:' + ident + ')\(', // {ident}"("       return FUNCTION;
+        FUNCTION = '(?:' + ident + ')\\(', // {ident}"("       return FUNCTION;
         NUMBER = '(?:' + num + ')', // {num}            return NUMBER;
         HASH = '#(?:' + name + ')', // "#"{name}        return HASH;
         PLUS = '(?:' + w + ')\\+', // {w}"+"           return PLUS;
