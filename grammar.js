@@ -63,17 +63,13 @@
         // ;
         return util.sequence(
             selector,
-            util.optional(
-                util.repeat(
-                    util.sequence(
-                        util.regexp(COMMA),
-                        util.optional(
-                            util.repeat(
-                                util.regexp(S)
-                            )
-                        ),
-                        selector
-                    )
+            util.optionalRepeat(
+                util.sequence(
+                    util.regexp(COMMA),
+                    util.optionalRepeat(
+                        util.regexp(S)
+                    ),
+                    selector
                 )
             )
         )(haystack, position);
@@ -85,12 +81,10 @@
         // ;
         return util.sequence(
             simple_selector_sequence,
-            util.optional(
-                util.repeat(
-                    util.sequence(
-                        combinator,
-                        simple_selector_sequence
-                    )
+            util.optionalRepeat(
+                util.sequence(
+                    combinator,
+                    simple_selector_sequence
                 )
             )
         )(haystack, position);
@@ -104,26 +98,20 @@
         return util.any(
             util.sequence(
                 util.regexp(PLUS),
-                util.optional(
-                    util.repeat(
-                        util.regexp(S)
-                    )
+                util.optionalRepeat(
+                    util.regexp(S)
                 )
             ),
             util.sequence(
                 util.regexp(GREATER),
-                util.optional(
-                    util.repeat(
-                        util.regexp(S)
-                    )
+                util.optionalRepeat(
+                    util.regexp(S)
                 )
             ),
             util.sequence(
                 util.regexp(TILDE),
-                util.optional(
-                    util.repeat(
-                        util.regexp(S)
-                    )
+                util.optionalRepeat(
+                    util.regexp(S)
                 )
             ),
             util.repeat(
@@ -144,15 +132,13 @@
                     type_selector,
                     universal
                 ),
-                util.optional(
-                    util.repeat(
-                        util.any(
-                            util.regexp(HASH),
-                            class_selector,
-                            attrib,
-                            pseudo,
-                            negation
-                        )
+                util.optionalRepeat(
+                    util.any(
+                        util.regexp(HASH),
+                        class_selector,
+                        attrib,
+                        pseudo,
+                        negation
                     )
                 )
             ),
@@ -262,10 +248,8 @@
         // ;
         return util.sequence(
             util.regexp(FUNCTION),
-            util.optional(
-                util.repeat(
-                    util.regexp(S)
-                )
+            util.optionalRepeat(
+                util.regexp(S)
             ),
             expression,
             util.text(')')
@@ -289,10 +273,8 @@
                     util.regexp(STRING),
                     util.regexp(IDENT)
                 ),
-                util.optional(
-                    util.repeat(
-                        util.regexp(S)
-                    )
+                util.optionalRepeat(
+                    util.regexp(S)
                 )
             )
         )(haystack, position);
@@ -304,16 +286,12 @@
         // ;
         return util.any(
             util.regexp(NOT),
-            util.optional(
-                util.repeat(
-                    util.regexp(S)
-                )
+            util.optionalRepeat(
+                util.regexp(S)
             ),
             negation_arg,
-            util.optional(
-                util.repeat(
-                    util.regexp(S)
-                )
+            util.optionalRepeat(
+                util.regexp(S)
             ),
             util.text(')')
         )(haystack, position);

@@ -126,6 +126,13 @@ var util = (function () {
         return r[1];
     }
 
+    util.optionalRepeat = function (pattern, separator) {
+        var separated = !separator ?
+                pattern :
+                util.then(util.sequence(separator, pattern), getFirst);
+        return combinatorOptional.bind(util, combinatorRepeat.bind(util, pattern, separated));
+    };
+
     util.then = function then(pattern, transform) {
         return combinatorThen.bind(util, pattern, transform);
     };
