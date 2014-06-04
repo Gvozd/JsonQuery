@@ -219,7 +219,42 @@
         //         DASHMATCH ] S* [ IDENT | STRING ] S*
         //     ]? ']'
         // ;
-        throw new Error('Not Implemented');
+        return util.sequence(
+            util.text('['),
+            util.optionalRepeat(
+                util.regexp(S)
+            ),
+            util.optional(
+                namespace_prefix
+            ),
+            util.regexp(IDENT),
+            util.optionalRepeat(
+                util.regexp(S)
+            ),
+            util.optional(
+                util.sequence(
+                    util.any(
+                        util.regexp(PREFIXMATCH),
+                        util.regexp(SUFFIXMATCH),
+                        util.regexp(SUBSTRINGMATCH),
+                        util.text('='),
+                        util.regexp(INCLUDES),
+                        util.regexp(DASHMATCH)
+                    ),
+                    util.optionalRepeat(
+                        util.regexp(S)
+                    ),
+                    util.any(
+                        util.regexp(IDENT),
+                        util.regexp(STRING)
+                    ),
+                    util.optionalRepeat(
+                        util.regexp(S)
+                    )
+                )
+            ),
+            util.text(']')
+        );
     }
 
     function pseudo(haystack, position) {
