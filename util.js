@@ -35,6 +35,19 @@ var util = (function () {
         }
     }
 
+    util.end = function end() {
+        return exprEnd;
+    };
+
+    function exprEnd(haystack, position) {
+        if (haystack.length === position) {
+            return {
+                res: '',
+                end: position
+            };
+        }
+    }
+
     util.optional = function optional(pattern) {
         return combinatorOptional.bind(util, pattern);
     };

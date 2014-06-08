@@ -72,6 +72,7 @@
                     selector
                 )
             )
+            //util.end()
         )(haystack, position);
     }
 
