@@ -87,16 +87,7 @@ module.exports = function (grunt) {
                 files: '<%= jshint.lib_test.src %>',
                 tasks: ['jshint:lib_test', 'nodeunit']
             }
-        },
-        exec: {
-            jison: {
-                cmd: path.join('..', 'node_modules', '.bin', 'jison') + ' grammar.jison',
-                cwd: 'lib'
-            }
-        },
-        clean: [
-            'lib/grammar.js'
-        ]
+        }
     });
 
     // These plugins provide necessary tasks.
@@ -108,6 +99,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-exec');
 
     // Default task.
-    grunt.registerTask('default', ['jshint', 'exec', 'concat', 'clean', 'nodeunit', 'uglify']);
+    grunt.registerTask('default', ['jshint', 'concat', 'nodeunit', 'uglify']);
 
 };
