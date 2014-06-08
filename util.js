@@ -25,9 +25,11 @@ var util = (function () {
 
     function exprRegexp(needle, haystack, position) {
         var m;
-        needle.lastIndex = position;
-        m = needle.exec(haystack);
-        if (m && m.index === 0) {
+        if (needle.global) {
+            needle.lastIndex = 0;
+        }
+        m = needle.exec(haystack.slice(position));
+        if (m && 0 === m.index) {
             return {
                 res: m[0],
                 end: position + m[0].length
