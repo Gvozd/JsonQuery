@@ -67,7 +67,7 @@ define(['JsonQuery'], function(JsonQuery) {
                 ]);
             });
 
-            xit("id", function () {
+            it("id", function () {
                 assert.deepEqual(new JsonQuery(".favoriteColor", data), [
                     "yellow"
                 ]);
@@ -353,7 +353,7 @@ define(['JsonQuery'], function(JsonQuery) {
                 }
             };
 
-            it("nested", function() {
+            xit("nested", function() {
                 assert.deepEqual(new JsonQuery(".object .string", data), [
                     "some string"
                 ]);
