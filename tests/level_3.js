@@ -17,7 +17,7 @@
 /*global define, describe, xdescribe, it, assert*/
 define(['JsonQuery'], function(JsonQuery) {
     'use strict';
-    describe('level_3', function () {
+    xdescribe('level_3', function () {
         describe('basic', function () {
             var data = {
                 "name": {
