@@ -51,14 +51,14 @@ define(['JsonQuery'], function(JsonQuery) {
                 "weight": 172
             };
 
-            xit("first-child", function () {
+            it("first-child", function () {
                 assert.deepEqual(new JsonQuery("string:first-child", data), [
                     "window",
                     "beer"
                 ]);
             });
 
-            xit("grouping", function () {
+            it("grouping", function () {
                 assert.deepEqual(new JsonQuery("string.level,number", data), [
                     "advanced",
                     "native",
@@ -67,13 +67,13 @@ define(['JsonQuery'], function(JsonQuery) {
                 ]);
             });
 
-            xit("id", function () {
+            it("id", function () {
                 assert.deepEqual(new JsonQuery(".favoriteColor", data), [
                     "yellow"
                 ]);
             });
 
-            xit("id_multiple", function () {
+            it("id_multiple", function () {
                 assert.deepEqual(new JsonQuery(".language", data), [
                     "Bulgarian",
                     "English",
@@ -81,26 +81,26 @@ define(['JsonQuery'], function(JsonQuery) {
                 ]);
             });
 
-            xit("id_quotes", function () {
+            it("id_quotes", function () {
                 assert.deepEqual(new JsonQuery(".\"weight\"", data), [
                     172
                 ]);
             });
 
-            xit("id_with_type", function () {
+            it("id_with_type", function () {
                 assert.deepEqual(new JsonQuery("string.favoriteColor", data), [
                     "yellow"
                 ]);
             });
 
-            xit("last-child", function () {
+            it("last-child", function () {
                 assert.deepEqual(new JsonQuery("string:last-child", data), [
                     "aisle",
                     "wine"
                 ]);
             });
 
-            xit("nth-child-2", function () {
+            it("nth-child-2", function () {
                 assert.deepEqual(new JsonQuery("string:nth-child(-n+2)", data), [
                     "window",
                     "aisle",
@@ -109,7 +109,7 @@ define(['JsonQuery'], function(JsonQuery) {
                 ]);
             });
 
-            xit("nth-child", function () {
+            it("nth-child", function () {
                 assert.deepEqual(new JsonQuery("string:nth-child(odd)", data), [
                     "window",
                     "beer",
@@ -124,7 +124,7 @@ define(['JsonQuery'], function(JsonQuery) {
                 ]);
             });
 
-            xit("root_pseudo", function () {
+            it("root_pseudo", function () {
                 assert.deepEqual(new JsonQuery(":root", data), [
                     {
                         "name": {
@@ -160,7 +160,7 @@ define(['JsonQuery'], function(JsonQuery) {
                 ]);
             });
 
-            xit("type", function () {
+            it("type", function () {
                 assert.deepEqual(new JsonQuery("string", data), [
                     "Lloyd",
                     "Hilaiel",
@@ -179,13 +179,13 @@ define(['JsonQuery'], function(JsonQuery) {
                 ]);
             });
 
-            xit("type2", function () {
+            it("type2", function () {
                 assert.deepEqual(new JsonQuery("number", data), [
                     172
                 ]);
             });
 
-            xit("type3", function () {
+            it("type3", function () {
                 assert.deepEqual(new JsonQuery("object", data), [
                     {
                         "first": "Lloyd",
@@ -237,7 +237,7 @@ define(['JsonQuery'], function(JsonQuery) {
                 ]);
             });
 
-            xit("universal", function () {
+            it("universal", function () {
                 assert.deepEqual(new JsonQuery("*", data), [
                     "Lloyd",
                     "Hilaiel",
@@ -327,7 +327,7 @@ define(['JsonQuery'], function(JsonQuery) {
                 ]);
             });
 
-            xit("child of root_pseudo #1", function () {
+            it("child of root_pseudo #1", function () {
                 assert.deepEqual(new JsonQuery(":root>object", data), [
                     {
                         "first": "Lloyd",
@@ -335,7 +335,7 @@ define(['JsonQuery'], function(JsonQuery) {
                     }
                 ]);
             });
-            xit("child of root_pseudo #2", function () {
+            it("child of root_pseudo #2", function () {
                 assert.deepEqual(new JsonQuery(":root > object", data), [
                     {
                         "first": "Lloyd",
@@ -353,19 +353,19 @@ define(['JsonQuery'], function(JsonQuery) {
                 }
             };
 
-            xit("nested", function() {
+            it("nested", function() {
                 assert.deepEqual(new JsonQuery(".object .string", data), [
                     "some string"
                 ]);
             });
 
-            xit("quoted-string", function() {
+            it("quoted-string", function() {
                 assert.deepEqual(new JsonQuery(".\"string\"", data), [
                     "some string"
                 ]);
             });
 
-            xit("string", function() {
+            it("string", function() {
                 assert.deepEqual(new JsonQuery(".string", data), [
                     "some string"
                 ]);
