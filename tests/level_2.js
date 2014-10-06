@@ -14,11 +14,11 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-/*global xdescribe, it, assert*/
+/*global define, describe, it, assert*/
 define(['JsonQuery'], function(JsonQuery) {
     'use strict';
-    xdescribe('level_2', function () {
-        xdescribe('sibling', function () {
+    describe('level_2', function () {
+        describe('sibling', function () {
             var data = {
                 "a": 1,
                 "b": 2,
