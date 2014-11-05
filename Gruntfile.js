@@ -1,4 +1,4 @@
-/*global module:false*/
+/*global module:false, require:false*/
 var path = require('path');
 module.exports = function (grunt) {
     'use strict';
@@ -58,25 +58,24 @@ module.exports = function (grunt) {
                 node:true,
                 globals: {}
             },
-            gruntfile: {
-                src: 'Gruntfile.js'
-            },
-            lib_test: {
+            lib: {
                 src: [
-                    'lib/filters/*.js',
-                    'lib/union/*.js',
                     'lib/combinator/*.js',
+                    'lib/filters/*.js',
+                    'lib/grammar/*.js',
                     'lib/pseudo/*.js',
+                    'lib/union/*.js',
                     'lib/utility/*.js',
-                    'lib/JsonQuery.js',
-                    'lib/findByFilter.js'
+                    'lib/findByFilter.js',
+                    'lib/JsonQuery.js'
                 ]
-            }
+            },
+            dist: 'dist/JsonQuery.js'
         },
-        nodeunit: {
-            files: [
-                'tests/options._js'
-            ]
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js'
+            }
         },
         watch: {
             gruntfile: {
@@ -91,14 +90,43 @@ module.exports = function (grunt) {
     });
 
     // These plugins provide necessary tasks.
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-nodeunit');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-exec');
+    grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.registerTask('requirejs', function() {
+        var requirejs = require( "requirejs"),
+            done = this.async(),
+            config = {
+                'baseUrl': './lib',
+                'name': 'JsonQuery',
+                'optimize': 'none',
+                'useStrict': true,
+                'skipModuleInsertion': true,
+                'wrap': {
+                    'start': 'var JsonQuery = (function() {\r\n    \'use strict\';\r\n',
+                    'end': '    return JsonQuery;\r\n}());'
+                },
+                'onBuildWrite': function (moduleName, path, contents) {
+                    var tmp = contents.split(/((?:['"]use strict['"];)|(?:\s*return))/);
+                    tmp.splice(0, 0, '\r\n    /*module: ' + moduleName + '*/\r\n//>>excludeStart("start", true)\r\n');
+                    tmp.splice(3, 0, '\r\n//>>excludeEnd("start")');
+                    tmp.splice(tmp.length - 2, 0, '\r\n//>>excludeStart("end", true)');
+                    tmp.splice(tmp.length, 0, '\r\n//>>excludeEnd("end")');
+                    return tmp.join('');
+                },
+                'out': './dist/JsonQuery.js'
+            };
+        requirejs.optimize( config, function( response ) {
+            grunt.verbose.writeln( response );
+            grunt.log.ok( "File '" + config.out + "' created." );
+            done();
+        }, function( err ) {
+            done( err );
+        });
+    });
+
 
     // Default task.
-    grunt.registerTask('default', ['jshint', 'concat', 'nodeunit', 'uglify']);
+    grunt.registerTask('default', ['jshint:lib', 'requirejs', 'karma', 'uglify', 'jshint:dist']);
 
 };

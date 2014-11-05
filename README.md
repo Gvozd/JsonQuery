@@ -12,6 +12,5 @@ In plan:
 How to build
 -------------
 ```
-npm i grunt-cli jison -g
 grunt
 ```
